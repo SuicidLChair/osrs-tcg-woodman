@@ -914,7 +914,7 @@ public class PackRevealOverlay extends Overlay
 
 	/**
 	 * {@code /Pack_{Title}.png} per {@code id} segment (e.g. {@code desert} → {@code Pack_Desert.png},
-	 * {@code kebos_kourend} → {@code Pack_Kebos_Kourend.png}). Falls back to {@code Pack_Standard.png} / {@code Pack.png}.
+	 * {@code kebos_kourend} → {@code Pack_Kebos_Kourend.png}). Falls back to {@code Pack_Standard.png}.
 	 */
 	private static BufferedImage loadPackArtForPackId(String packId)
 	{
@@ -922,12 +922,11 @@ public class PackRevealOverlay extends Overlay
 		if (packId == null || packId.isEmpty())
 		{
 			candidates.add("/Pack_Standard.png");
-			candidates.add("/Pack.png");
 		}
 		else
 		{
 			candidates.add("/Pack_" + titleCasePackIdForResource(packId) + ".png");
-			candidates.add("/Pack.png");
+			candidates.add("/Pack_Standard.png");
 		}
 		for (String path : candidates)
 		{
