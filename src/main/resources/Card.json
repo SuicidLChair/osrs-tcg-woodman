@@ -2181,23 +2181,6 @@
     }
   },
   {
-    "name": "Adamant arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Adamant_arrowtips_detail.png/130px-Adamant_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 40
-  },
-  {
     "name": "Adamant axe",
     "category": [
       "Resource",
@@ -2588,23 +2571,6 @@
     }
   },
   {
-    "name": "Adamant dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Adamant_dart_tip_detail.png/130px-Adamant_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly-looking dart tip made of adamant - needs feathers for flight.",
-    "value": 36
-  },
-  {
     "name": "Adamant dart",
     "category": [
       "Resource",
@@ -2900,23 +2866,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Adamant javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Adamant_javelin_tips_detail.png/130px-Adamant_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 440
   },
   {
     "name": "Adamant javelin",
@@ -4613,40 +4562,6 @@
     }
   },
   {
-    "name": "Amethyst arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Amethyst_arrowtips_detail.png/130px-Amethyst_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 245
-  },
-  {
-    "name": "Amethyst bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Amethyst_bolt_tips_detail.png/130px-Amethyst_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Amethyst bolt tips.",
-    "value": 160
-  },
-  {
     "name": "Amethyst broad bolts",
     "category": [
       "Resource",
@@ -4680,23 +4595,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Amethyst dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Amethyst_dart_tip_detail.png/130px-Amethyst_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly-looking dart tip made of amethyst - needs feathers for flight.",
-    "value": 200
   },
   {
     "name": "Amethyst dart",
@@ -4772,23 +4670,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Amethyst javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Amethyst_javelin_tips_detail.png/130px-Amethyst_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 1520
   },
   {
     "name": "Amethyst javelin",
@@ -5264,7 +5145,7 @@
       "Drop"
     ],
     "examine": "A very powerful zenyte amulet, infused with araxyte venom.",
-    "value": 400000,
+    "value": 600000,
     "equipmentSlot": "neck",
     "combatStats": {
       "attackSlash": 25,
@@ -5539,7 +5420,7 @@
       "Drop"
     ],
     "examine": "The hat of a powerful sorceress from a bygone era.",
-    "value": 45000,
+    "value": 650000,
     "equipmentSlot": "head",
     "combatStats": {
       "attackSlash": 0,
@@ -5575,7 +5456,7 @@
       "Drop"
     ],
     "examine": "The robe bottoms of a powerful sorceress from a bygone era.",
-    "value": 80000,
+    "value": 700000,
     "equipmentSlot": "legs",
     "combatStats": {
       "attackSlash": 0,
@@ -5611,7 +5492,7 @@
       "Drop"
     ],
     "examine": "The robe top of a powerful sorceress from a bygone era.",
-    "value": 120000,
+    "value": 750000,
     "equipmentSlot": "body",
     "combatStats": {
       "attackSlash": 0,
@@ -10704,23 +10585,6 @@
     "value": 220
   },
   {
-    "name": "Atlatl dart tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Atlatl_dart_tips_detail.png/130px-Atlatl_dart_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some atlatl darts with these.",
-    "value": 245
-  },
-  {
     "name": "Atlax\u0027s diary",
     "category": [
       "Resource"
@@ -10979,7 +10843,7 @@
       "Drop"
     ],
     "examine": "Perhaps this could be used to create a defensive weapon.",
-    "value": 2500000
+    "value": 2000000
   },
   {
     "name": "Avernic defender",
@@ -11000,7 +10864,7 @@
       "Drop"
     ],
     "examine": "A defensive weapon.",
-    "value": 2500000,
+    "value": 2250000,
     "equipmentSlot": "shield",
     "combatStats": {
       "attackStab": 30,
@@ -12739,23 +12603,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Barb bolttips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Barb_bolttips_detail.png/130px-Barb_bolttips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make bolts with these.",
-    "value": 95
   },
   {
     "name": "Barb-tail harpoon",
@@ -22877,24 +22724,6 @@
     "value": 1
   },
   {
-    "name": "Broken dragon hasta",
-    "category": [
-      "Resource",
-      "Kourend"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Broken_dragon_hasta_detail.png/130px-Broken_dragon_hasta_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Drop"
-    ],
-    "examine": "The item to make into a hasta.",
-    "value": 62400
-  },
-  {
     "name": "Broken dragon hook",
     "category": [
       "Resource",
@@ -23098,23 +22927,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Bronze arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Bronze_arrowtips_detail.png/130px-Bronze_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 1
   },
   {
     "name": "Bronze axe",
@@ -23524,23 +23336,6 @@
     }
   },
   {
-    "name": "Bronze dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Bronze_dart_tip_detail.png/130px-Bronze_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly looking dart tip made of bronze - needs feathers for flight.",
-    "value": 1
-  },
-  {
     "name": "Bronze dart",
     "category": [
       "Resource",
@@ -23875,23 +23670,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Bronze javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Bronze_javelin_tips_detail.png/130px-Bronze_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 25
   },
   {
     "name": "Bronze javelin",
@@ -25727,7 +25505,7 @@
       "Resource",
       "Misthalin"
     ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Burning_claw_detail.png/130px-Burning_claw_detail.png",
+    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Burning_claws_detail.png/130px-Burning_claws_detail.png",
     "questItem": false,
     "tradeable": true,
     "equipable": false,
@@ -25736,7 +25514,7 @@
     "options": [
       "Drop"
     ],
-    "examine": "An intact, lightly smouldering claw.",
+    "examine": "Torn from the hands of ancient demons.",
     "value": 400000
   },
   {
@@ -34070,7 +33848,7 @@
       "Drop"
     ],
     "examine": "Sturdier than it looks.",
-    "value": 1500000,
+    "value": 650000,
     "equipmentSlot": "body",
     "combatStats": {
       "attackStab": 0,
@@ -34430,7 +34208,7 @@
       "Drop"
     ],
     "examine": "This helmet shines bright, like a diamond.",
-    "value": 500000,
+    "value": 450000,
     "equipmentSlot": "head",
     "combatStats": {
       "attackStab": 0,
@@ -34505,7 +34283,7 @@
       "Drop"
     ],
     "examine": "A bright, shiny set of leg armour.",
-    "value": 1000000,
+    "value": 550000,
     "equipmentSlot": "legs",
     "combatStats": {
       "attackStab": 0,
@@ -37826,23 +37604,6 @@
     }
   },
   {
-    "name": "Diamond bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Diamond_bolt_tips_detail.png/130px-Diamond_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Diamond bolt tips.",
-    "value": 133
-  },
-  {
     "name": "Diamond bolts",
     "category": [
       "Resource",
@@ -38184,25 +37945,6 @@
       "attackRange": 1,
       "combatStyle": "Bulwark"
     }
-  },
-  {
-    "name": "Dirty arrowtips",
-    "category": [
-      "Resource",
-      "Varlamore"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dirty_arrowtips_detail.png/130px-Dirty_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Clean",
-      "Drop"
-    ],
-    "examine": "I can clean these.",
-    "value": 16
   },
   {
     "name": "Disk of returning",
@@ -38775,7 +38517,7 @@
       "Drop"
     ],
     "examine": "A two-handed Dragon Sword.",
-    "value": 220000,
+    "value": 120000,
     "equipmentSlot": "2h",
     "combatStats": {
       "attackSlash": 92,
@@ -38831,23 +38573,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Dragon arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_arrowtips_detail.png/130px-Dragon_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Dragon talons, usable as arrowheads.",
-    "value": 500
   },
   {
     "name": "Dragon axe",
@@ -39231,7 +38956,7 @@
       "Drop"
     ],
     "examine": "A series of connected metal rings.",
-    "value": 250000,
+    "value": 150000,
     "equipmentSlot": "body",
     "combatStats": {
       "attackSlash": 0,
@@ -39286,7 +39011,7 @@
       "Drop"
     ],
     "examine": "A set of fighting claws.",
-    "value": 205000,
+    "value": 750000,
     "equipmentSlot": "2h",
     "combatStats": {
       "attackSlash": 57,
@@ -39404,23 +39129,6 @@
     }
   },
   {
-    "name": "Dragon dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_dart_tip_detail.png/130px-Dragon_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly looking dragon dart tip - needs feathers for flight.",
-    "value": 250
-  },
-  {
     "name": "Dragon dart",
     "category": [
       "Resource",
@@ -39477,7 +39185,7 @@
       "Drop"
     ],
     "examine": "A defensive weapon.",
-    "value": 68007,
+    "value": 100000,
     "equipmentSlot": "shield",
     "combatStats": {
       "attackStab": 25,
@@ -39569,7 +39277,7 @@
       "Drop"
     ],
     "examine": "Protects your head and looks impressive too.",
-    "value": 150000,
+    "value": 250000,
     "equipmentSlot": "head",
     "combatStats": {
       "attackSlash": 0,
@@ -39623,7 +39331,7 @@
       "Drop"
     ],
     "examine": "A pair of very nice gloves.",
-    "value": 100000,
+    "value": 90000,
     "equipmentSlot": "hands",
     "combatStats": {
       "attackSlash": 9,
@@ -39658,7 +39366,7 @@
       "Drop"
     ],
     "examine": "A dragon halberd.",
-    "value": 250000,
+    "value": 120000,
     "equipmentSlot": "2h",
     "combatStats": {
       "attackSlash": 95,
@@ -39796,7 +39504,7 @@
       "Drop"
     ],
     "examine": "A crossbow used for dragon hunting.",
-    "value": 300000,
+    "value": 875000,
     "equipmentSlot": "weapon",
     "combatStats": {
       "attackSlash": 0,
@@ -39835,7 +39543,7 @@
       "Drop"
     ],
     "examine": "A lance that is exceptionally good at killing dragons and their ilk.",
-    "value": 300000,
+    "value": 600000,
     "equipmentSlot": "weapon",
     "combatStats": {
       "attackSlash": 65,
@@ -39948,23 +39656,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Dragon javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_javelin_tips_detail.png/130px-Dragon_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 1950
   },
   {
     "name": "Dragon keel parts",
@@ -40249,42 +39940,6 @@
     }
   },
   {
-    "name": "Dragon metal lump",
-    "category": [
-      "Resource",
-      "Misthalin",
-      "Fremennik"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_metal_lump_detail.png/130px-Dragon_metal_lump_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A badly damaged lump of dragon metal.",
-    "value": 150000
-  },
-  {
-    "name": "Dragon metal shard",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_metal_shard_detail.png/130px-Dragon_metal_shard_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A badly damaged shard of dragon metal.",
-    "value": 1200000
-  },
-  {
     "name": "Dragon metal sheet",
     "category": [
       "Resource",
@@ -40301,25 +39956,6 @@
     ],
     "examine": "A very old sheet of dragon metal.",
     "value": 50000
-  },
-  {
-    "name": "Dragon metal slice",
-    "category": [
-      "Resource",
-      "Misthalin",
-      "Fremennik"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragon_metal_slice_detail.png/130px-Dragon_metal_slice_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A badly damaged slice of dragon metal.",
-    "value": 100000
   },
   {
     "name": "Dragon nails",
@@ -40394,7 +40030,7 @@
       "Drop"
     ],
     "examine": "If rocks could feel fear, they\u0027d fear this.",
-    "value": 97950,
+    "value": 170000,
     "equipmentSlot": "weapon",
     "combatStats": {
       "attackSlash": -2,
@@ -40512,7 +40148,7 @@
       "Drop"
     ],
     "examine": "These look pretty heavy.",
-    "value": 270000,
+    "value": 120000,
     "equipmentSlot": "legs",
     "combatStats": {
       "attackSlash": 0,
@@ -40553,7 +40189,7 @@
       "Drop"
     ],
     "examine": "This looks pretty heavy.",
-    "value": 270000,
+    "value": 120000,
     "equipmentSlot": "legs",
     "combatStats": {
       "attackSlash": 0,
@@ -40859,7 +40495,7 @@
       "Drop"
     ],
     "examine": "Spikey, close combat weapon.",
-    "value": 120000,
+    "value": 420000,
     "equipmentSlot": "weapon",
     "combatStats": {
       "attackSlash": -4,
@@ -41116,23 +40752,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Dragonstone bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Dragonstone_bolt_tips_detail.png/130px-Dragonstone_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Dragonstone bolt tips.",
-    "value": 667
   },
   {
     "name": "Dragonstone bolts",
@@ -43506,7 +43125,7 @@
       "Drop"
     ],
     "examine": "A maul crafted from the component parts of Tekton.",
-    "value": 500010,
+    "value": 1250000,
     "equipmentSlot": "2h",
     "combatStats": {
       "attackSlash": 0,
@@ -43720,7 +43339,7 @@
       "Drop"
     ],
     "examine": "A ward once used by Elidinis herself.",
-    "value": 5000000,
+    "value": 1250000,
     "equipmentSlot": "shield",
     "combatStats": {
       "attackSlash": 0,
@@ -44173,23 +43792,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Emerald bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Emerald_bolt_tips_detail.png/130px-Emerald_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Emerald bolt tips.",
-    "value": 33
   },
   {
     "name": "Emerald bolts",
@@ -47581,23 +47183,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Fibula piece",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Fibula_piece_detail.png/130px-Fibula_piece_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Drop"
-    ],
-    "examine": "An interesting looking bone shard.",
-    "value": 60
   },
   {
     "name": "Field ration",
@@ -51295,7 +50880,7 @@
       "Drop"
     ],
     "examine": "A defensive weapon with prestigious ornamentation.",
-    "value": 2500000,
+    "value": 2750000,
     "equipmentSlot": "shield",
     "combatStats": {
       "attackStab": 30,
@@ -63126,23 +62711,6 @@
     "value": 6
   },
   {
-    "name": "Hunter spear tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Hunter_spear_tips_5_detail.png/130px-Hunter_spear_tips_5_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some spears with these.",
-    "value": 6
-  },
-  {
     "name": "Hunter\u0027s honour",
     "category": [
       "Resource",
@@ -65363,23 +64931,6 @@
     }
   },
   {
-    "name": "Iron arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Iron_arrowtips_detail.png/130px-Iron_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 2
-  },
-  {
     "name": "Iron axe",
     "category": [
       "Resource",
@@ -65750,23 +65301,6 @@
     }
   },
   {
-    "name": "Iron dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Iron_dart_tip_detail.png/130px-Iron_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly looking dart tip made of iron - needs feathers for flight.",
-    "value": 3
-  },
-  {
     "name": "Iron dart",
     "category": [
       "Resource",
@@ -66062,23 +65596,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Iron javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Iron_javelin_tips_detail.png/130px-Iron_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 35
   },
   {
     "name": "Iron javelin",
@@ -67258,23 +66775,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Jade bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Jade_bolt_tips_detail.png/130px-Jade_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Jade bolt tips.",
-    "value": 10
   },
   {
     "name": "Jade bolts",
@@ -69600,25 +69100,6 @@
     "value": 6
   },
   {
-    "name": "Kodai insignia",
-    "category": [
-      "Resource",
-      "Kourend"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Kodai_insignia_detail.png/130px-Kodai_insignia_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": false,
-    "noteable": true,
-    "options": [
-      "Inspect",
-      "Drop"
-    ],
-    "examine": "An insignia representing Kodai, Xeric\u0027s fearsome wizards.",
-    "value": 150000
-  },
-  {
     "name": "Kodai potion",
     "category": [
       "Resource",
@@ -69655,7 +69136,7 @@
       "Drop"
     ],
     "examine": "A wand of an ancient Kodai mage.",
-    "value": 150000,
+    "value": 1250000,
     "equipmentSlot": "weapon",
     "combatStats": {
       "attackSlash": 0,
@@ -77631,23 +77112,6 @@
     }
   },
   {
-    "name": "Mithril arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Mithril_arrowtips_detail.png/130px-Mithril_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 16
-  },
-  {
     "name": "Mithril axe",
     "category": [
       "Resource",
@@ -78330,23 +77794,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Mithril javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Mithril_javelin_tips_detail.png/130px-Mithril_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 165
   },
   {
     "name": "Mithril javelin",
@@ -85130,23 +84577,6 @@
     }
   },
   {
-    "name": "Onyx bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Onyx_bolt_tips_detail.png/130px-Onyx_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Onyx bolt tips.",
-    "value": 1000
-  },
-  {
     "name": "Onyx bolts",
     "category": [
       "Resource",
@@ -85337,23 +84767,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Opal bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Opal_bolt_tips_detail.png/130px-Opal_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Opal bolt tips.",
-    "value": 7
   },
   {
     "name": "Opal bolts",
@@ -86785,23 +86198,6 @@
       "attackRange": 1,
       "combatStyle": "Unarmed"
     }
-  },
-  {
-    "name": "Pearl bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Pearl_bolt_tips_detail.png/130px-Pearl_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Pearl bolt tips.",
-    "value": 12
   },
   {
     "name": "Pearl bolts",
@@ -99284,23 +98680,6 @@
     }
   },
   {
-    "name": "Ruby bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Ruby_bolt_tips_detail.png/130px-Ruby_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Ruby bolt tips.",
-    "value": 67
-  },
-  {
     "name": "Ruby bolts",
     "category": [
       "Resource",
@@ -99711,23 +99090,6 @@
     }
   },
   {
-    "name": "Rune arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Rune_arrowtips_detail.png/130px-Rune_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 200
-  },
-  {
     "name": "Rune axe",
     "category": [
       "Resource",
@@ -100085,23 +99447,6 @@
     }
   },
   {
-    "name": "Rune dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Rune_dart_tip_detail.png/130px-Rune_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly-looking dart tip made of runite - needs feathers for flight.",
-    "value": 175
-  },
-  {
     "name": "Rune dart",
     "category": [
       "Resource",
@@ -100433,23 +99778,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Rune javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Rune_javelin_tips_detail.png/130px-Rune_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 1350
   },
   {
     "name": "Rune javelin",
@@ -102718,23 +102046,6 @@
       "prayer": 0,
       "magicDamage": 0
     }
-  },
-  {
-    "name": "Sapphire bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Sapphire_bolt_tips_detail.png/130px-Sapphire_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Sapphire bolt tips.",
-    "value": 17
   },
   {
     "name": "Sapphire bolts",
@@ -112796,23 +112107,6 @@
     }
   },
   {
-    "name": "Steel arrowtips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Steel_arrowtips_detail.png/130px-Steel_arrowtips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "I can make some arrows with these.",
-    "value": 6
-  },
-  {
     "name": "Steel axe",
     "category": [
       "Resource",
@@ -113208,23 +112502,6 @@
     }
   },
   {
-    "name": "Steel dart tip",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Steel_dart_tip_detail.png/130px-Steel_dart_tip_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "A deadly-looking dart tip made of steel - needs feathers for flight.",
-    "value": 5
-  },
-  {
     "name": "Steel dart",
     "category": [
       "Resource",
@@ -113520,23 +112797,6 @@
       "attackRange": 1,
       "combatStyle": "Spear"
     }
-  },
-  {
-    "name": "Steel javelin tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Steel_javelin_tips_detail.png/130px-Steel_javelin_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Needs a shaft.",
-    "value": 90
   },
   {
     "name": "Steel javelin",
@@ -121584,23 +120844,6 @@
     }
   },
   {
-    "name": "Topaz bolt tips",
-    "category": [
-      "Resource"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Topaz_bolt_tips_detail.png/130px-Topaz_bolt_tips_detail.png",
-    "questItem": false,
-    "tradeable": true,
-    "equipable": false,
-    "stackable": true,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Red Topaz bolt tips.",
-    "value": 13
-  },
-  {
     "name": "Topaz bolts",
     "category": [
       "Resource",
@@ -122189,7 +121432,7 @@
       "Drop"
     ],
     "examine": "An ancient warrior\u0027s full helm.",
-    "value": 200000,
+    "value": 700000,
     "equipmentSlot": "head",
     "combatStats": {
       "attackStab": 0,
@@ -122226,7 +121469,7 @@
       "Drop"
     ],
     "examine": "An ancient warrior\u0027s platebody.",
-    "value": 600000,
+    "value": 700000,
     "equipmentSlot": "body",
     "combatStats": {
       "attackStab": 0,
@@ -122263,7 +121506,7 @@
       "Drop"
     ],
     "examine": "An ancient warrior\u0027s platelegs.",
-    "value": 400000,
+    "value": 700000,
     "equipmentSlot": "legs",
     "combatStats": {
       "attackStab": 0,
@@ -123691,7 +122934,7 @@
       "Drop"
     ],
     "examine": "A buckler carved from the twisted remains of the Great Olm.",
-    "value": 90000,
+    "value": 500000,
     "equipmentSlot": "shield",
     "combatStats": {
       "attackSlash": -8,
@@ -134877,18 +134120,6 @@
     "maxHit": "22 (standard) 34 (Icicle Crash)"
   },
   {
-    "name": "Araxxor",
-    "level": 890,
-    "category": [
-      "Monster",
-      "Morytania"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Araxxor.png/130px-Araxxor.png",
-    "examine": "A seriously scary spider.",
-    "attackStyle": "Crush, Magic, Ranged",
-    "maxHit": "38 (melee) 21 (magic) 34 (ranged)"
-  },
-  {
     "name": "Artio",
     "level": 320,
     "category": [
@@ -136185,10 +135416,11 @@
       "Monster",
       "Morytania"
     ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Araxxor_%28dead%29.png/130px-Araxxor_%28dead%29.png",
-    "examine": "A seriously dead spider.",
+    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Araxxor.png/280px-Araxxor.png",
+    "examine": "A seriously scary spider.",
     "attackStyle": "Crush, Magic, Ranged",
-    "maxHit": "38 (melee) 21 (magic) 34 (ranged)"
+    "maxHit": "38 (melee) 21 (magic) 34 (ranged)",
+    "questItem": false
   },
   {
     "name": "Araxyte",
