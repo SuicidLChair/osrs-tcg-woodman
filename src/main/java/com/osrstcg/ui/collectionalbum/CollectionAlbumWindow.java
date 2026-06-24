@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
-import java.awt.KeyboardFocusManager;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -547,7 +546,7 @@ public final class CollectionAlbumWindow extends JFrame
 		{
 			return;
 		}
-		Component focus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		Component focus = getFocusOwner();
 		if (focus instanceof JTextComponent)
 		{
 			return;
