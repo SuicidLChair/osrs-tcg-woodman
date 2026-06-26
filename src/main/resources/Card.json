@@ -50578,66 +50578,6 @@
     "equipmentSlot": "weapon"
   },
   {
-    "name": "Koriff\u0027s coif",
-    "category": [
-      "Resource",
-      "Armour"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Koriff%27s_coif_detail.png/130px-Koriff%27s_coif_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": true,
-    "stackable": false,
-    "noteable": false,
-    "options": [
-      "Wear",
-      "Drop"
-    ],
-    "examine": "Koriff the Crowd Pleaser\u0027s coif.",
-    "value": 21500,
-    "equipmentSlot": "head"
-  },
-  {
-    "name": "Koriff\u0027s cowl",
-    "category": [
-      "Resource",
-      "Armour"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Koriff%27s_cowl_detail.png/130px-Koriff%27s_cowl_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": true,
-    "stackable": false,
-    "noteable": false,
-    "options": [
-      "Wear",
-      "Drop"
-    ],
-    "examine": "Koriff the Crowd Pleaser\u0027s cowl.",
-    "value": 16500,
-    "equipmentSlot": "head"
-  },
-  {
-    "name": "Koriff\u0027s headband",
-    "category": [
-      "Resource",
-      "Armour"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Koriff%27s_headband_detail.png/130px-Koriff%27s_headband_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": true,
-    "stackable": false,
-    "noteable": false,
-    "options": [
-      "Wear",
-      "Drop"
-    ],
-    "examine": "Koriff the Crowd Pleaser\u0027s headband.",
-    "value": 11500,
-    "equipmentSlot": "head"
-  },
-  {
     "name": "Kovac\u0027s grog",
     "category": [
       "Resource",
@@ -99702,17 +99642,6 @@
     "maxHit": "30 (Magic), 32 (Ranged), 32 (Melee), 80 (Dragonfire), 121 (Dragonfire Bomb/Special), 41 (Rapid Fire/Special)"
   },
   {
-    "name": "Yama",
-    "level": 1238,
-    "category": [
-      "Monster"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Yama.png/130px-Yama.png",
-    "examine": "A demon of quite obviously fathomable power. The vicious grin rarely leaves his face.",
-    "attackStyle": "Melee (Slash), Ranged, Magic",
-    "maxHit": "46 (auto-attacks), 160 (Meteor Strike), 80 (Shadow Stomp)"
-  },
-  {
     "name": "Zebak",
     "level": 371,
     "category": [
@@ -110130,18 +110059,6 @@
     "examine": "A wise villager.",
     "attackStyle": "Crush",
     "maxHit": "2"
-  },
-  {
-    "name": "Sol Heredit",
-    "level": 1563,
-    "category": [
-      "Monster",
-      "Varlamore"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Sol_Heredit_%28sitting%29.png/130px-Sol_Heredit_%28sitting%29.png",
-    "examine": "He looks important!",
-    "attackStyle": "Various",
-    "maxHit": "44 (Typeless AOE), 44 (Grapple), 15-25-35 (Triple Parry 1), 15-30-45 (Triple Parry 2)"
   },
   {
     "name": "Soldier (Burthorpe)",
