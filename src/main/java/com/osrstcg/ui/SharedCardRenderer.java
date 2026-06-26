@@ -15,6 +15,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.util.ImageUtil;
@@ -42,6 +44,7 @@ public final class SharedCardRenderer
 	private static final Color PANEL_DARK = new Color(0x222222);
 	private static final Color PANEL_MID = new Color(0x2F2F2F);
 	private static final BufferedImage CARD_BACK_IMAGE = ImageUtil.loadImageResource(SharedCardRenderer.class, "/Cardback.png");
+	private static final Map<Long, Path2D.Float> FOIL_TWINKLE_PATH_CACHE = new ConcurrentHashMap<>();
 
 	private SharedCardRenderer()
 	{
@@ -190,6 +193,12 @@ public final class SharedCardRenderer
 		return m * 0x1.0p-52;
 	}
 
+	/** True during the short foil sheen sweep; idle most of each {@link #FOIL_SHEEN_CYCLE_MS} cycle. */
+	public static boolean isFoilSheenAnimating()
+	{
+		return System.currentTimeMillis() % FOIL_SHEEN_CYCLE_MS < FOIL_SHEEN_SWEEP_MS;
+	}
+
 	/**
 	 * Four-point star with concave edges between points (taller than wide), centered at the origin.
 	 * @param halfW east–west extent from center to tip
@@ -197,15 +206,19 @@ public final class SharedCardRenderer
 	 */
 	private static Path2D.Float foilTwinklePath(float halfW, float halfH)
 	{
-		float k = FOIL_TWINKLE_CONCAVE_K;
-		Path2D.Float p = new Path2D.Float();
-		p.moveTo(0f, -halfH);
-		p.quadTo(k * halfW, -k * halfH, halfW, 0f);
-		p.quadTo(k * halfW, k * halfH, 0f, halfH);
-		p.quadTo(-k * halfW, k * halfH, -halfW, 0f);
-		p.quadTo(-k * halfW, -k * halfH, 0f, -halfH);
-		p.closePath();
-		return p;
+		long key = ((long) Float.floatToIntBits(halfW) << 32) ^ Float.floatToIntBits(halfH);
+		return FOIL_TWINKLE_PATH_CACHE.computeIfAbsent(key, k ->
+		{
+			float concave = FOIL_TWINKLE_CONCAVE_K;
+			Path2D.Float p = new Path2D.Float();
+			p.moveTo(0f, -halfH);
+			p.quadTo(concave * halfW, -concave * halfH, halfW, 0f);
+			p.quadTo(concave * halfW, concave * halfH, 0f, halfH);
+			p.quadTo(-concave * halfW, concave * halfH, -halfW, 0f);
+			p.quadTo(-concave * halfW, -concave * halfH, 0f, -halfH);
+			p.closePath();
+			return p;
+		});
 	}
 
 	/**

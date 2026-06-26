@@ -127,8 +127,9 @@ public final class CollectionAlbumWindow extends JFrame
 	private final CollectionAlbumVariantsPanel variantsPanel;
 	private Timer searchDebounceTimer;
 	private final Timer imagePollTimer;
-	/** ~30 FPS repaints while foil sheen is visible (album grid is otherwise polled at {@link #imagePollTimer}). */
+	/** Repaints foil sheen during its short sweep window. */
 	private final Timer foilAnimTimer;
+	private long lastFoilSparkleRepaintMs;
 
 	private final CardLayout albumNorthLayout = new CardLayout();
 	private final JPanel albumNorthHost = new JPanel(albumNorthLayout);
@@ -147,6 +148,8 @@ public final class CollectionAlbumWindow extends JFrame
 	private int pageIndex;
 	private int filteredTotal;
 	private int pageCount;
+	/** Filtered + sorted card list for the active tab; paging reuses this without re-sorting. */
+	private List<CardDefinition> filteredSortedCards = List.of();
 	/** Selected collection row for party send; cleared when changing cards or after a successful send. */
 	private String sendChosenInstanceId;
 	private String sendFocusCardName;
@@ -291,12 +294,12 @@ public final class CollectionAlbumWindow extends JFrame
 		prevBtn.addActionListener(e ->
 		{
 			pageIndex = Math.max(0, pageIndex - 1);
-			rebuildModel();
+			refreshCurrentPage();
 		});
 		nextBtn.addActionListener(e ->
 		{
 			pageIndex = Math.min(Math.max(0, pageCount - 1), pageIndex + 1);
-			rebuildModel();
+			refreshCurrentPage();
 		});
 
 		JPanel top = new JPanel();
@@ -460,11 +463,19 @@ public final class CollectionAlbumWindow extends JFrame
 				refreshPartyMemberCombo();
 			}
 		});
-		partyUiTimer.start();
 
-		imagePollTimer = new Timer(140, e ->
+		imagePollTimer = new Timer(250, e ->
 		{
-			if (isShowing())
+			if (!isShowing())
+			{
+				return;
+			}
+			boolean repaint = grid.needsImageLoadRepaint();
+			if (albumVariantsVisible && variantsPanel.needsImageLoadRepaint())
+			{
+				repaint = true;
+			}
+			if (repaint)
 			{
 				grid.repaint();
 				if (albumVariantsVisible)
@@ -472,8 +483,8 @@ public final class CollectionAlbumWindow extends JFrame
 					variantsPanel.repaint();
 				}
 			}
+			updateAlbumRepaintTimers();
 		});
-		imagePollTimer.start();
 
 		foilAnimTimer = new Timer(33, e ->
 		{
@@ -481,16 +492,30 @@ public final class CollectionAlbumWindow extends JFrame
 			{
 				return;
 			}
-			if (grid.needsFoilAnimationRepaint())
+			long now = System.currentTimeMillis();
+			boolean sheen = SharedCardRenderer.isFoilSheenAnimating();
+			boolean repaintGrid = grid.hasVisibleFoilCards()
+				&& (sheen || now - lastFoilSparkleRepaintMs >= 150L);
+			boolean repaintVariants = albumVariantsVisible && variantsPanel.hasVisibleFoilCards()
+				&& (sheen || now - lastFoilSparkleRepaintMs >= 150L);
+			if (!repaintGrid && !repaintVariants)
+			{
+				return;
+			}
+			if (!sheen)
+			{
+				lastFoilSparkleRepaintMs = now;
+			}
+			if (repaintGrid)
 			{
 				grid.repaint();
 			}
-			if (albumVariantsVisible && variantsPanel.needsFoilAnimationRepaint())
+			if (repaintVariants)
 			{
 				variantsPanel.repaint();
 			}
+			updateAlbumRepaintTimers();
 		});
-		foilAnimTimer.start();
 
 		styleFrameFonts();
 
@@ -570,11 +595,13 @@ public final class CollectionAlbumWindow extends JFrame
 		if (!visible && isShowing())
 		{
 			persistWindowSize();
+			stopTimers();
 		}
 		super.setVisible(visible);
 		if (visible)
 		{
 			scheduleApplySavedWindowSize();
+			startTimers();
 		}
 	}
 
@@ -617,6 +644,51 @@ public final class CollectionAlbumWindow extends JFrame
 		if (searchDebounceTimer != null)
 		{
 			searchDebounceTimer.stop();
+		}
+	}
+
+	private void startTimers()
+	{
+		partyUiTimer.start();
+		updateAlbumRepaintTimers();
+	}
+
+	/** Start/stop image and foil repaint timers based on whether the current view needs them. */
+	private void updateAlbumRepaintTimers()
+	{
+		if (!isShowing())
+		{
+			imagePollTimer.stop();
+			foilAnimTimer.stop();
+			return;
+		}
+
+		boolean pendingImages = grid.needsImageLoadRepaint()
+			|| (albumVariantsVisible && variantsPanel.needsImageLoadRepaint());
+		if (pendingImages)
+		{
+			if (!imagePollTimer.isRunning())
+			{
+				imagePollTimer.start();
+			}
+		}
+		else
+		{
+			imagePollTimer.stop();
+		}
+
+		boolean foilAnim = grid.hasVisibleFoilCards()
+			|| (albumVariantsVisible && variantsPanel.hasVisibleFoilCards());
+		if (foilAnim)
+		{
+			if (!foilAnimTimer.isRunning())
+			{
+				foilAnimTimer.start();
+			}
+		}
+		else
+		{
+			foilAnimTimer.stop();
 		}
 	}
 
@@ -721,7 +793,7 @@ public final class CollectionAlbumWindow extends JFrame
 		if (next != pageIndex)
 		{
 			pageIndex = next;
-			rebuildModel();
+			refreshCurrentPage();
 		}
 		e.consume();
 	}
@@ -733,7 +805,12 @@ public final class CollectionAlbumWindow extends JFrame
 		int collectionIdx = collectionCombo.getSelectedIndex();
 		if (tabFilters.isEmpty() || collectionIdx < 0 || collectionIdx >= tabFilters.size())
 		{
+			filteredSortedCards = List.of();
+			filteredTotal = 0;
+			pageCount = 1;
+			pageIndex = 0;
 			grid.setSlots(List.of(), selectionPreserveIndex(List.of()));
+			updatePageControls(0, 0);
 			return;
 		}
 
@@ -799,16 +876,34 @@ public final class CollectionAlbumWindow extends JFrame
 				break;
 		}
 
+		filteredSortedCards = working;
 		filteredTotal = working.size();
 		pageCount = Math.max(1, (filteredTotal + PAGE_SIZE - 1) / PAGE_SIZE);
+		pageIndex = Math.max(0, Math.min(pageIndex, pageCount - 1));
+		refreshCurrentPage();
+	}
+
+	/** Updates the visible page from {@link #filteredSortedCards} without re-filtering or re-sorting. */
+	private void refreshCurrentPage()
+	{
+		if (filteredSortedCards.isEmpty())
+		{
+			grid.setSlots(List.of(), selectionPreserveIndex(List.of()));
+			updatePageControls(0, 0);
+			return;
+		}
+
 		pageIndex = Math.max(0, Math.min(pageIndex, pageCount - 1));
 		int from = pageIndex * PAGE_SIZE;
 		int to = Math.min(from + PAGE_SIZE, filteredTotal);
 
+		Map<CardCollectionKey, Integer> owned = stateService.getState().getCollectionState().getOwnedCards();
+		Set<String> collected = collectedNamesFromOwned(owned);
+
 		List<AlbumSlot> slots = new ArrayList<>();
 		for (int i = from; i < to; i++)
 		{
-			CardDefinition c = working.get(i);
+			CardDefinition c = filteredSortedCards.get(i);
 			String name = c.getName();
 			Color rarity = rarityTable.colorForCardName(name);
 			boolean ownAny = collected.contains(name);
@@ -821,7 +916,13 @@ public final class CollectionAlbumWindow extends JFrame
 			slots.add(new AlbumSlot(c, rarity, ownAny, displayFoil, nQty, fQty, singleTip));
 		}
 		grid.setSlots(slots, selectionPreserveIndex(slots));
+		updatePageControls(from, to);
+		preloadAround(filteredSortedCards, from, to);
+		updateAlbumRepaintTimers();
+	}
 
+	private void updatePageControls(int from, int to)
+	{
 		int startN = filteredTotal == 0 ? 0 : from + 1;
 		int endN = filteredTotal == 0 ? 0 : to;
 		pageLabel.setText(String.format("Page %s / %s   (%s–%s of %s)",
@@ -829,8 +930,6 @@ public final class CollectionAlbumWindow extends JFrame
 			NumberFormatting.format(startN), NumberFormatting.format(endN), NumberFormatting.format(filteredTotal)));
 		prevBtn.setEnabled(pageIndex > 0);
 		nextBtn.setEnabled(pageIndex < pageCount - 1);
-
-		preloadAround(working, from, to);
 	}
 
 	/** Index to re-select after rebuild when the focused card is still on the current page. */
@@ -964,6 +1063,7 @@ public final class CollectionAlbumWindow extends JFrame
 		sendFocusCardName = null;
 		sendPickFromVariantOnly = false;
 		updateSouthBarButtons();
+		updateAlbumRepaintTimers();
 	}
 
 	private void enterAlbumVariantView(AlbumSlot slot)
@@ -1009,6 +1109,7 @@ public final class CollectionAlbumWindow extends JFrame
 		}
 		albumCenterLayout.show(albumCenterHost, VIEW_CARD_VARIANTS);
 		albumVariantsVisible = true;
+		updateAlbumRepaintTimers();
 	}
 
 	private void onVariantInstancePicked(OwnedCardInstance inst)

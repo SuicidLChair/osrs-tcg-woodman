@@ -12,11 +12,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,9 +34,23 @@ import okhttp3.Response;
 public class WikiImageCacheService
 {
 	private static final String WIKI_BASE_URL = "https://oldschool.runescape.wiki";
+	/** Max decoded images kept in heap; evicted entries remain on disk. */
+	private static final int MEMORY_CACHE_MAX_ENTRIES = 128;
+	/** Cap concurrent disk/network decodes so fast album paging cannot flood the common pool. */
+	private static final int MAX_IN_FLIGHT_LOADS = 12;
 
 	private final OkHttpClient okHttpClient;
-	private final Map<String, CompletableFuture<BufferedImage>> imageFutures = new ConcurrentHashMap<>();
+	private final Semaphore loadPermits = new Semaphore(MAX_IN_FLIGHT_LOADS);
+	private final Map<String, BufferedImage> memoryCache = Collections.synchronizedMap(
+		new LinkedHashMap<String, BufferedImage>(MEMORY_CACHE_MAX_ENTRIES + 1, 0.75f, true)
+		{
+			@Override
+			protected boolean removeEldestEntry(Map.Entry<String, BufferedImage> eldest)
+			{
+				return size() > MEMORY_CACHE_MAX_ENTRIES;
+			}
+		});
+	private final Map<String, CompletableFuture<BufferedImage>> loadingFutures = new ConcurrentHashMap<>();
 
 	@Inject
 	public WikiImageCacheService(OkHttpClient okHttpClient)
@@ -55,6 +72,24 @@ public class WikiImageCacheService
 			.forEach(this::ensureLoad);
 	}
 
+	/** True when the image is not yet available in memory (not started or still loading). */
+	public boolean needsLoad(String url)
+	{
+		if (url == null)
+		{
+			return false;
+		}
+
+		String normalized = normalizeUrl(url);
+		if (normalized.isEmpty() || memoryCache.containsKey(normalized))
+		{
+			return false;
+		}
+
+		CompletableFuture<BufferedImage> future = loadingFutures.get(normalized);
+		return future == null || !future.isDone();
+	}
+
 	public BufferedImage getCached(String url)
 	{
 		if (url == null)
@@ -68,17 +103,27 @@ public class WikiImageCacheService
 			return null;
 		}
 
-		CompletableFuture<BufferedImage> future = imageFutures.get(normalized);
+		BufferedImage cached = memoryCache.get(normalized);
+		if (cached != null)
+		{
+			return cached;
+		}
+
+		CompletableFuture<BufferedImage> future = loadingFutures.get(normalized);
 		if (future == null || !future.isDone())
 		{
-			// Kick off a load if requested before preload path gets here.
 			ensureLoad(normalized);
 			return null;
 		}
 
 		try
 		{
-			return future.getNow(null);
+			BufferedImage image = future.getNow(null);
+			if (image != null)
+			{
+				memoryCache.put(normalized, image);
+			}
+			return image;
 		}
 		catch (RuntimeException ex)
 		{
@@ -89,12 +134,32 @@ public class WikiImageCacheService
 	private void ensureLoad(String rawUrl)
 	{
 		String url = normalizeUrl(rawUrl);
-		if (url.isEmpty())
+		if (url.isEmpty() || memoryCache.containsKey(url) || loadingFutures.containsKey(url))
 		{
 			return;
 		}
 
-		imageFutures.computeIfAbsent(url, key -> CompletableFuture.supplyAsync(() -> loadImage(key)));
+		loadingFutures.computeIfAbsent(url, key -> CompletableFuture
+			.supplyAsync(() ->
+			{
+				loadPermits.acquireUninterruptibly();
+				try
+				{
+					return loadImage(key);
+				}
+				finally
+				{
+					loadPermits.release();
+				}
+			})
+			.whenComplete((image, ex) ->
+			{
+				loadingFutures.remove(key);
+				if (image != null)
+				{
+					memoryCache.put(key, image);
+				}
+			}));
 	}
 
 	private BufferedImage loadImage(String url)

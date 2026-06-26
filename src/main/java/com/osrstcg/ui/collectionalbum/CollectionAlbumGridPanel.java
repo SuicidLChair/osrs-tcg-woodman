@@ -186,12 +186,29 @@ final class CollectionAlbumGridPanel extends JPanel
 		onSelectionChanged.run();
 	}
 
-	/** True when any visible slot uses foil visuals (moving sheen); used to drive a fast repaint timer. */
-	boolean needsFoilAnimationRepaint()
+	boolean hasVisibleFoilCards()
 	{
 		for (AlbumSlot s : slots)
 		{
 			if (s != null && s.displayFoil())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** True when a visible card image is still loading from cache. */
+	boolean needsImageLoadRepaint()
+	{
+		for (AlbumSlot s : slots)
+		{
+			if (s == null || s.card() == null)
+			{
+				continue;
+			}
+			String url = s.card().getImageUrl();
+			if (url != null && !url.trim().isEmpty() && imageCacheService.needsLoad(url))
 			{
 				return true;
 			}

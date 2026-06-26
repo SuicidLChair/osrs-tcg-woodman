@@ -113,8 +113,8 @@ public final class CollectionAlbumVariantsPanel extends JPanel
 		revalidate();
 	}
 
-	/** True when the current variants page shows at least one foil copy (moving sheen). */
-	public boolean needsFoilAnimationRepaint()
+	/** True when the current variants page shows at least one foil copy. */
+	public boolean hasVisibleFoilCards()
 	{
 		int from = variantPageIndex * PAGE_SIZE;
 		for (int i = 0; i < PAGE_SIZE; i++)
@@ -131,6 +131,16 @@ public final class CollectionAlbumVariantsPanel extends JPanel
 			}
 		}
 		return false;
+	}
+
+	public boolean needsImageLoadRepaint()
+	{
+		if (card == null)
+		{
+			return false;
+		}
+		String url = card.getImageUrl();
+		return url != null && !url.trim().isEmpty() && imageCacheService.needsLoad(url);
 	}
 
 	public void shiftVariantPage(int delta)
