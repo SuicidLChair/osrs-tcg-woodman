@@ -419,32 +419,32 @@ public class PackOpeningService
 	}
 
 	/**
-	 * Low roll = rarer: Godly &lt; 2%, Mythic &lt; 4%, …, Common &lt; 100% of {@code [0, 100)}.
+	 * Low roll = rarer: Godly &lt; 0.66%, Mythic &lt; 2.66%, …, Common &lt; 100% of {@code [0, 100)}.
 	 */
 	private RarityMath.Tier rollTier()
 	{
 		double roll = random.nextDouble() * 100.0d;
-		if (roll < 2.0d)
+		if (roll < 0.66d)
 		{
 			return RarityMath.Tier.GODLY;
 		}
-		if (roll < 4.0d)
+		if (roll < 2.66d)
 		{
 			return RarityMath.Tier.MYTHIC;
 		}
-		if (roll < 8.0d)
+		if (roll < 6.66d)
 		{
 			return RarityMath.Tier.LEGENDARY;
 		}
-		if (roll < 16.0d)
+		if (roll < 14.66d)
 		{
 			return RarityMath.Tier.EPIC;
 		}
-		if (roll < 32.0d)
+		if (roll < 30.66d)
 		{
 			return RarityMath.Tier.RARE;
 		}
-		if (roll < 64.0d)
+		if (roll < 62.66d)
 		{
 			return RarityMath.Tier.UNCOMMON;
 		}
@@ -453,16 +453,16 @@ public class PackOpeningService
 
 	/**
 	 * Tier roll restricted to Legendary / Mythic / Godly, preserving the same relative odds as the top segment of
-	 * {@link #rollTier()} (2% / 2% / 4% of the full bar → 25% / 25% / 50% among the three).
+	 * {@link #rollTier()} (0.66% / 2% / 4% of the full bar).
 	 */
 	private RarityMath.Tier rollTierApexPackOnly()
 	{
-		double roll = random.nextDouble() * 8.0d;
-		if (roll < 2.0d)
+		double roll = random.nextDouble() * 6.66d;
+		if (roll < 0.66d)
 		{
 			return RarityMath.Tier.GODLY;
 		}
-		if (roll < 4.0d)
+		if (roll < 2.66d)
 		{
 			return RarityMath.Tier.MYTHIC;
 		}

@@ -14,13 +14,13 @@ public final class RarityMath
 	public enum Tier
 	{
 		/** Marginal pack tier-roll probability; sums to 100%. Used for approximate "1 in N" on reveal. */
-		COMMON("Common", new Color(0xFFFFFF), 36.0d),
+		COMMON("Common", new Color(0xFFFFFF), 37.34d),
 		UNCOMMON("Uncommon", new Color(0x2ECC71), 32.0d),
 		RARE("Rare", new Color(0x3498DB), 16.0d),
 		EPIC("Epic", new Color(0x9B59B6), 8.0d),
 		LEGENDARY("Legendary", new Color(0xE74C3C), 4.0d),
 		MYTHIC("Mythic", new Color(0xFF6EC7), 2.0d),
-		GODLY("Godly", new Color(0xF2C94C), 2.0d);
+		GODLY("Godly", new Color(0xF2C94C), 0.66d);
 
 		private final String label;
 		private final Color color;
