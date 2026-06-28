@@ -76,6 +76,18 @@ public class CreditAwardService
 			safeName(npcName), combatLevel, NumberFormatting.format(totalCredits), NumberFormatting.format(stateService.getCredits())));
 	}
 
+	public void awardFlatCredits(String reason, long credits)
+	{
+		if (credits <= 0L)
+		{
+			return;
+		}
+
+		stateService.addCredits(credits);
+		debugAward(String.format("%s -> +%s credits (total %s)",
+			safeName(reason), NumberFormatting.format(credits), NumberFormatting.format(stateService.getCredits())));
+	}
+
 	public boolean onGameTick(GameTick event)
 	{
 		return syncExperienceFromOverallXp();

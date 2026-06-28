@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;

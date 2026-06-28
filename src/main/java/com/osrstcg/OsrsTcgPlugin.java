@@ -16,6 +16,7 @@ import com.osrstcg.overlay.PackRevealInputListener;
 import com.osrstcg.overlay.PackRevealOverlay;
 import com.osrstcg.service.CardPartyTransferService;
 import com.osrstcg.service.CreditAwardService;
+import com.osrstcg.service.GameMessageCreditTracker;
 import com.osrstcg.service.NpcKillCreditTracker;
 import com.osrstcg.service.CollectionSetCompletionUtil;
 import com.osrstcg.service.PackOpeningService;
@@ -129,6 +130,8 @@ public class OsrsTcgPlugin extends Plugin
 	@Inject
 	private NpcKillCreditTracker npcKillCreditTracker;
 	@Inject
+	private GameMessageCreditTracker gameMessageCreditTracker;
+	@Inject
 	private PartyService partyService;
 	@Inject
 	private WSClient wsClient;
@@ -174,6 +177,7 @@ public class OsrsTcgPlugin extends Plugin
 		mouseManager.registerMouseWheelListener(packRevealInputListener);
 		keyManager.registerKeyListener(packRevealInputListener);
 		eventBus.register(npcKillCreditTracker);
+		eventBus.register(gameMessageCreditTracker);
 		eventBus.register(cardPartyTransferService);
 		eventBus.register(playerCombatMonitor);
 		eventBus.register(packSafeModeService);
@@ -198,6 +202,7 @@ public class OsrsTcgPlugin extends Plugin
 			navigationButton = null;
 		}
 		eventBus.unregister(npcKillCreditTracker);
+		eventBus.unregister(gameMessageCreditTracker);
 		eventBus.unregister(cardPartyTransferService);
 		eventBus.unregister(playerCombatMonitor);
 		eventBus.unregister(packSafeModeService);

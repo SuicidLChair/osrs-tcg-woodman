@@ -1,5 +1,6 @@
 package com.osrstcg.service;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -39,23 +40,22 @@ public final class NpcKillCreditTracker
 		Map.entry("Dusk", Set.of(7889)),
 		Map.entry("Abyssal Sire", Set.of(5891)),
 		Map.entry("Kephri", Set.of(11722)),
-		Map.entry("Verzik Vitur", Set.of(10832, 8371, 10849)),
-		Map.entry("Great Olm", Set.of(7551))
+		Map.entry("Verzik Vitur", Set.of(10832, 8371, 10849))
 	);
 
-	/** Minions / non-kill phases — no credit (matches monster-monitor exclusions). */
-	private static final Map<String, Set<Integer>> EXCLUDED_NPC_IDS = Map.ofEntries(
-		Map.entry("The Hueycoatl", Set.of(14010, 14011, 14013)),
-		Map.entry("Hueycoatl Tail", Set.of(14014, 14015)),
-		Map.entry("Hueycoatl Tail (Broken)", Set.of(14014, 14015)),
-		Map.entry("Hueycoatl body", Set.of(14017, 14018)),
-		Map.entry("Dawn", Set.of(7888)),
-		Map.entry("Unstable ice", Set.of(13688)),
-		Map.entry("Cracked Ice", Set.of(13026)),
-		Map.entry("Rubble", Set.of(14018)),
-		Map.entry("Great Olm Right Claw", Set.of(7550, 7553)),
-		Map.entry("Great Olm Left Claw", Set.of(7552, 7555))
-	);
+	/** Kill-credit exclusions: exact name, name fragment (with optional exception), or NPC id. */
+	private static final NpcExclusionRule[] NPC_EXCLUSIONS = {
+		NpcExclusionRule.exactName("Great Olm"),
+		NpcExclusionRule.nameContains("nylocas", "Nylocas Vasilias"),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.HUEYCOATL_BODY_SEGMENTS),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.HUEYCOATL_TAIL),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.HUEYCOATL_BODY_AND_RUBBLE),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.GROTESQUE_GUARDIANS_DAWN),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.PHANTOM_MUSPAH_UNSTABLE_ICE),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.CRACKED_ICE),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.GREAT_OLM_RIGHT_CLAW),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.GREAT_OLM_LEFT_CLAW),
+	};
 
 	private final Client client;
 	private final ClientThread clientThread;
@@ -207,13 +207,23 @@ public final class NpcKillCreditTracker
 
 	private boolean isExcludedNpc(String npcName, int npcId)
 	{
-		if (EXCLUDED_NPC_IDS.containsKey(npcName) && EXCLUDED_NPC_IDS.get(npcName).contains(npcId))
+		String normalized = normalizeName(npcName);
+		for (NpcExclusionRule rule : NPC_EXCLUSIONS)
 		{
-			return true;
+			if (rule.matches(normalized, npcId))
+			{
+				return true;
+			}
 		}
-		for (Set<Integer> excludedIds : EXCLUDED_NPC_IDS.values())
+		return false;
+	}
+
+	private static boolean isExcludedNpcName(String npcName)
+	{
+		String normalized = normalizeName(npcName);
+		for (NpcExclusionRule rule : NPC_EXCLUSIONS)
 		{
-			if (excludedIds.contains(npcId))
+			if (rule.matchesName(normalized))
 			{
 				return true;
 			}
@@ -235,14 +245,164 @@ public final class NpcKillCreditTracker
 	}
 
 	/**
+	 * NPC ids for minions / non-kill phases (matches monster-monitor exclusions).
+	 * Real boss kills are tracked via {@link #FINAL_PHASE_IDS}, {@link HealthTrackedNpcIds}, or
+	 * {@link GameMessageCreditTracker}.
+	 */
+	private static final class ExcludedNpcIds
+	{
+		/** The Hueycoatl — exposed body segments before the summit fight. */
+		static final Set<Integer> HUEYCOATL_BODY_SEGMENTS = Set.of(14010, 14011, 14013);
+
+		/** The Hueycoatl — tail (including broken tail during shield phase). */
+		static final Set<Integer> HUEYCOATL_TAIL = Set.of(14014, 14015);
+
+		/** The Hueycoatl — coiled body parts and rubble on the mountain path. */
+		static final Set<Integer> HUEYCOATL_BODY_AND_RUBBLE = Set.of(14017, 14018);
+
+		/** Grotesque Guardians — Dawn phase ({@link #FINAL_PHASE_IDS} credits Dusk). */
+		static final Set<Integer> GROTESQUE_GUARDIANS_DAWN = Set.of(7888);
+
+		/** Amoxliatl — unstable ice spawned during the fight. */
+		static final Set<Integer> PHANTOM_MUSPAH_UNSTABLE_ICE = Set.of(13688);
+
+		/** Cracked Ice — Moons. */
+		static final Set<Integer> CRACKED_ICE = Set.of(13026);
+
+		/** Great Olm — right claw ({@link #NPC_EXCLUSIONS} exact-name rule covers the head). */
+		static final Set<Integer> GREAT_OLM_RIGHT_CLAW = Set.of(7550, 7553);
+
+		/** Great Olm — left claw. */
+		static final Set<Integer> GREAT_OLM_LEFT_CLAW = Set.of(7552, 7555);
+
+		private ExcludedNpcIds()
+		{
+		}
+	}
+
+	/**
+	 * Boss NPC ids tracked via health ratio when {@link ActorDeath} does not fire (see monster-monitor).
+	 */
+	private static final class HealthTrackedNpcIds
+	{
+		/** The Hueycoatl — summit fight (earlier form; only {@link #HUEYCOATL_FINAL} awards credit). */
+		static final int HUEYCOATL = 14009;
+
+		/** The Hueycoatl — final kill form on the Darkfrost summit. */
+		static final int HUEYCOATL_FINAL = 14012;
+
+		/** Amoxliatl — Varlamore frost boss. */
+		static final int AMOXLIATL = 13685;
+
+		/** Duke Sucellus — DT2 boss. */
+		static final int DUKE_SUCELLUS = 12166;
+
+		/** Perilous Moons — Blood Moon. */
+		static final int BLOOD_MOON = 13011;
+
+		/** Perilous Moons — Eclipse Moon. */
+		static final int ECLIPSE_MOON = 13012;
+
+		/** Perilous Moons — Blue Moon. */
+		static final int BLUE_MOON = 13013;
+
+		static final Set<Integer> ALL = Set.of(
+			HUEYCOATL,
+			HUEYCOATL_FINAL,
+			AMOXLIATL,
+			DUKE_SUCELLUS,
+			BLOOD_MOON,
+			ECLIPSE_MOON,
+			BLUE_MOON);
+
+		private HealthTrackedNpcIds()
+		{
+		}
+	}
+
+	private static final class NpcExclusionRule
+	{
+		private enum MatchMode
+		{
+			EXACT_NAME,
+			NAME_CONTAINS,
+			NPC_ID
+		}
+
+		private final MatchMode mode;
+		private final String pattern;
+		private final String exceptName;
+		private final Set<Integer> npcIds;
+
+		private NpcExclusionRule(MatchMode mode, String pattern, String exceptName, Set<Integer> npcIds)
+		{
+			this.mode = mode;
+			this.pattern = pattern;
+			this.exceptName = exceptName;
+			this.npcIds = npcIds;
+		}
+
+		static NpcExclusionRule exactName(String name)
+		{
+			return new NpcExclusionRule(MatchMode.EXACT_NAME, name, null, Set.of());
+		}
+
+		static NpcExclusionRule nameContains(String fragment, String exceptName)
+		{
+			return new NpcExclusionRule(MatchMode.NAME_CONTAINS, fragment, exceptName, Set.of());
+		}
+
+		static NpcExclusionRule npcIds(Set<Integer> ids)
+		{
+			return new NpcExclusionRule(MatchMode.NPC_ID, null, null, ids);
+		}
+
+		boolean matches(String normalizedName, int npcId)
+		{
+			switch (mode)
+			{
+				case EXACT_NAME:
+					return matchesExactName(normalizedName);
+				case NAME_CONTAINS:
+					return matchesNameContains(normalizedName);
+				case NPC_ID:
+					return npcIds.contains(npcId);
+				default:
+					return false;
+			}
+		}
+
+		boolean matchesName(String normalizedName)
+		{
+			switch (mode)
+			{
+				case EXACT_NAME:
+					return matchesExactName(normalizedName);
+				case NAME_CONTAINS:
+					return matchesNameContains(normalizedName);
+				default:
+					return false;
+			}
+		}
+
+		private boolean matchesExactName(String normalizedName)
+		{
+			return pattern.equalsIgnoreCase(normalizedName);
+		}
+
+		private boolean matchesNameContains(String normalizedName)
+		{
+			return normalizedName.toLowerCase(Locale.ENGLISH).contains(pattern.toLowerCase(Locale.ENGLISH))
+				&& !exceptName.equalsIgnoreCase(normalizedName);
+		}
+	}
+
+	/**
 	 * NPCs that may not fire {@link ActorDeath}; death inferred from health ratio (see monster-monitor).
 	 */
 	private static final class SpecialNpcCreditWatch
 	{
 		private final Map<Integer, NPC> trackedNpcs = new ConcurrentHashMap<>();
-		private final Set<Integer> specialNpcIds = Set.of(
-			14009, 14012, 13685, 12166, 13013, 13012, 13011
-		);
 		private final Set<Integer> loggedNpcIndices = ConcurrentHashMap.newKeySet();
 		private final ClientThread clientThread;
 		private final CreditAwardService creditAwardService;
@@ -257,7 +417,7 @@ public final class NpcKillCreditTracker
 
 		boolean isSpecialNpc(NPC npc)
 		{
-			return npc != null && specialNpcIds.contains(npc.getId());
+			return npc != null && HealthTrackedNpcIds.ALL.contains(npc.getId());
 		}
 
 		void trackNpc(NPC npc)
@@ -285,6 +445,10 @@ public final class NpcKillCreditTracker
 					{
 						loggedNpcIndices.add(npcIndex);
 						String name = normalizeName(npc.getName());
+						if (isExcludedNpcName(name))
+						{
+							continue;
+						}
 						int combatLevel = npc.getCombatLevel();
 						creditAwardService.awardNpcKillCredits(name, combatLevel);
 						tcgPanel.refresh();
@@ -302,7 +466,7 @@ public final class NpcKillCreditTracker
 		{
 			if ("The Hueycoatl".equalsIgnoreCase(npc.getName()))
 			{
-				return npc.getId() == 14012;
+				return npc.getId() == HealthTrackedNpcIds.HUEYCOATL_FINAL;
 			}
 			return true;
 		}

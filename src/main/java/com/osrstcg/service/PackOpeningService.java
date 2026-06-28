@@ -3,7 +3,6 @@ package com.osrstcg.service;
 import com.osrstcg.data.BoosterPackDefinition;
 import com.osrstcg.data.CardDatabase;
 import com.osrstcg.data.CardDefinition;
-import com.osrstcg.OsrsTcgConfig;
 import com.osrstcg.model.CardCollectionKey;
 import com.osrstcg.model.PackCardResult;
 import com.osrstcg.model.PackOpenResult;
