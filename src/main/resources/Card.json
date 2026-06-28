@@ -23940,25 +23940,6 @@
     "value": 1
   },
   {
-    "name": "Corrupted shark",
-    "category": [
-      "Resource",
-      "Consumable"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Corrupted_shark_detail.png/130px-Corrupted_shark_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": false,
-    "stackable": false,
-    "noteable": false,
-    "options": [
-      "Eat",
-      "Destroy"
-    ],
-    "examine": "No matter how much I consume, there always seems to be more!",
-    "value": 0
-  },
-  {
     "name": "Corrupted spike",
     "category": [
       "Resource"
@@ -30177,26 +30158,6 @@
     ],
     "examine": "A warm creamy alcoholic beverage.",
     "value": 30
-  },
-  {
-    "name": "Drygore blowpipe",
-    "category": [
-      "Resource",
-      "Weapon",
-      "Desert"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Drygore_blowpipe_detail.png/130px-Drygore_blowpipe_detail.png",
-    "questItem": false,
-    "tradeable": false,
-    "equipable": true,
-    "stackable": false,
-    "noteable": false,
-    "options": [
-      "Drop"
-    ],
-    "examine": "Fires darts with utmost precision.",
-    "value": 50000,
-    "equipmentSlot": "2h"
   },
   {
     "name": "Dual macuahuitl",
