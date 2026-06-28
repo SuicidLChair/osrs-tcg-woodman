@@ -1,6 +1,7 @@
 package com.osrstcg.service;
 
 import com.osrstcg.util.NumberFormatting;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -10,8 +11,8 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.Skill;
+import net.runelite.api.events.FakeXpDrop;
 import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.StatChanged;
 
 @Singleton
@@ -20,26 +21,18 @@ public class CreditAwardService
 {
 	private static final long XP_PER_CREDIT_CHUNK = 1000L;
 	private static final long CREDITS_PER_CHUNK = 100L;
+	/** Ignore bogus fake XP drop payloads. */
+	private static final int FAKE_XP_DROP_SANITY_CAP = 20_000_000;
 
 	private final Client client;
 	private final TcgStateService stateService;
 	private final Map<Skill, Integer> lastKnownRealLevels = new EnumMap<>(Skill.class);
+	private final int[] previousSkillXp = new int[Skill.values().length];
 	private boolean skillLevelsInitialized;
+	private boolean skillXpInitialized;
 
-	/** Last overall XP used for chunk awards; {@code -1} until first snapshot after login. */
-	private long lastOverallXpForCredits = -1L;
-
-	/**
-	 * Baseline must not latch onto a transient low {@link Client#getOverallExperience()} (often wrong for a
-	 * tick or two after login, sometimes matching unrelated small numbers). Require the same reading on
-	 * two different {@link Client#getTickCount()} values so multiple {@link StatChanged} calls in one tick
-	 * cannot "stabilize" garbage.
-	 */
-	private static final long OVERALL_XP_BASELINE_NO_CANDIDATE = Long.MIN_VALUE;
-	private static final int OVERALL_XP_BASELINE_MIN_TICKS = 2;
-	private long overallXpBaselineCandidate = OVERALL_XP_BASELINE_NO_CANDIDATE;
-	private int overallXpBaselineTicksSeen;
-	private int overallXpBaselineLastTick = -1;
+	/** XP from skill drops not yet converted into credit chunks. */
+	private long uncreditedXp;
 
 	@Inject
 	public CreditAwardService(Client client, TcgStateService stateService)
@@ -53,8 +46,10 @@ public class CreditAwardService
 	 */
 	public void resetExperienceCreditBaseline()
 	{
-		lastOverallXpForCredits = -1L;
-		clearOverallXpBaselineStaging();
+		uncreditedXp = 0L;
+		skillXpInitialized = false;
+		Arrays.fill(previousSkillXp, 0);
+		snapshotSkillExperiencesIfLoggedIn();
 	}
 
 	public void awardNpcKillCredits(String npcName, int combatLevel)
@@ -88,22 +83,18 @@ public class CreditAwardService
 			safeName(reason), NumberFormatting.format(credits), NumberFormatting.format(stateService.getCredits())));
 	}
 
-	public boolean onGameTick(GameTick event)
-	{
-		return syncExperienceFromOverallXp();
-	}
-
 	public void onStatChanged(StatChanged event)
 	{
 		Skill skill = event.getSkill();
 		if (skill == null)
 		{
-			syncExperienceFromOverallXp();
 			return;
 		}
+
+		trackXpGainFromStatChanged(skill, event.getXp());
+
 		if (isOverallSkill(skill))
 		{
-			syncExperienceFromOverallXp();
 			return;
 		}
 
@@ -111,7 +102,6 @@ public class CreditAwardService
 		if (!skillLevelsInitialized || !lastKnownRealLevels.containsKey(skill))
 		{
 			lastKnownRealLevels.put(skill, current);
-			syncExperienceFromOverallXp();
 			return;
 		}
 
@@ -120,7 +110,6 @@ public class CreditAwardService
 		if (current <= previous)
 		{
 			lastKnownRealLevels.put(skill, current);
-			syncExperienceFromOverallXp();
 			return;
 		}
 
@@ -138,20 +127,31 @@ public class CreditAwardService
 			debugAward(String.format("Level up %s: %d -> %d -> +%s credits (total %s)",
 				skill.getName(), previous, current, NumberFormatting.format(totalReward), NumberFormatting.format(stateService.getCredits())));
 		}
+	}
 
-		syncExperienceFromOverallXp();
+	public void onFakeXpDrop(FakeXpDrop event)
+	{
+		if (event == null || event.getSkill() == null)
+		{
+			return;
+		}
+
+		int xp = event.getXp();
+		if (xp <= 0 || xp >= FAKE_XP_DROP_SANITY_CAP)
+		{
+			return;
+		}
+
+		applyXpGain(xp, event.getSkill().getName() + " drop");
 	}
 
 	public void onGameStateChanged(GameStateChanged event)
 	{
 		if (event.getGameState() == GameState.LOGGED_IN)
 		{
-			// Defer baseline establishment to first StatChanged per-skill to avoid
-			// login-time transients being interpreted as level-ups.
 			lastKnownRealLevels.clear();
 			skillLevelsInitialized = true;
-			lastOverallXpForCredits = -1L;
-			clearOverallXpBaselineStaging();
+			snapshotSkillExperiencesIfLoggedIn();
 			return;
 		}
 
@@ -159,66 +159,48 @@ public class CreditAwardService
 		{
 			lastKnownRealLevels.clear();
 			skillLevelsInitialized = false;
-			lastOverallXpForCredits = -1L;
-			clearOverallXpBaselineStaging();
+			skillXpInitialized = false;
+			uncreditedXp = 0L;
+			Arrays.fill(previousSkillXp, 0);
 		}
 	}
 
-	/** @return true if credits were added from XP chunks */
-	private boolean syncExperienceFromOverallXp()
+	private void trackXpGainFromStatChanged(Skill skill, int currentXp)
 	{
-		if (client.getGameState() != GameState.LOGGED_IN)
+		if (isOverallSkill(skill))
 		{
-			return false;
+			return;
 		}
 
-		long totalXp = (long) client.getOverallExperience();
-		if (totalXp < 0L)
+		int skillIndex = skill.ordinal();
+		if (skillIndex < 0 || skillIndex >= previousSkillXp.length)
 		{
-			return false;
+			return;
 		}
 
-		// Do not snapshot baseline on a single positive reading: after login the client can briefly report
-		// 0, then a bogus low total, then the real total — baselining the low value makes the next tick look
-		// like huge XP gain (~85M credits for ~850M XP). Require the same total on distinct game ticks.
-		if (lastOverallXpForCredits < 0L)
+		int previousXp = previousSkillXp[skillIndex];
+		if (skillXpInitialized && previousXp > 0 && currentXp > previousXp)
 		{
-			if (totalXp <= 0L)
-			{
-				clearOverallXpBaselineStaging();
-				return false;
-			}
-			int tick = client.getTickCount();
-			if (totalXp != overallXpBaselineCandidate)
-			{
-				overallXpBaselineCandidate = totalXp;
-				overallXpBaselineTicksSeen = 1;
-				overallXpBaselineLastTick = tick;
-				return false;
-			}
-			if (tick == overallXpBaselineLastTick)
-			{
-				return false;
-			}
-			overallXpBaselineTicksSeen++;
-			overallXpBaselineLastTick = tick;
-			if (overallXpBaselineTicksSeen < OVERALL_XP_BASELINE_MIN_TICKS)
-			{
-				return false;
-			}
-			lastOverallXpForCredits = totalXp;
-			clearOverallXpBaselineStaging();
-			return false;
+			applyXpGain(currentXp - previousXp, skill.getName());
+		}
+		previousSkillXp[skillIndex] = currentXp;
+	}
+
+	private void applyXpGain(long xpGained, String source)
+	{
+		if (xpGained <= 0L)
+		{
+			return;
 		}
 
-		if (totalXp < lastOverallXpForCredits)
-		{
-			lastOverallXpForCredits = totalXp;
-			return false;
-		}
+		uncreditedXp += xpGained;
+		awardCreditsFromUncreditedXp(source);
+	}
 
-		long gained = totalXp - lastOverallXpForCredits;
-		long chunks = gained / XP_PER_CREDIT_CHUNK;
+	/** @return true if credits were added from XP chunks */
+	private boolean awardCreditsFromUncreditedXp(String source)
+	{
+		long chunks = uncreditedXp / XP_PER_CREDIT_CHUNK;
 		if (chunks <= 0L)
 		{
 			return false;
@@ -226,19 +208,31 @@ public class CreditAwardService
 
 		double mult = Math.max(0.0d, stateService.getState().getRewardTuning().getXpCreditMultiplier());
 		long credits = Math.round((double) (chunks * CREDITS_PER_CHUNK) * mult);
+		long xpCredited = chunks * XP_PER_CREDIT_CHUNK;
 		if (credits <= 0L)
 		{
-			lastOverallXpForCredits += chunks * XP_PER_CREDIT_CHUNK;
+			uncreditedXp -= xpCredited;
 			return false;
 		}
 
 		stateService.addCredits(credits);
-		lastOverallXpForCredits += chunks * XP_PER_CREDIT_CHUNK;
-		long xpCredited = chunks * XP_PER_CREDIT_CHUNK;
-		debugAward(String.format("Overall XP +%s (chunks of %s) -> +%s credits (total %s)",
-			NumberFormatting.format(xpCredited), NumberFormatting.format(XP_PER_CREDIT_CHUNK),
+		uncreditedXp -= xpCredited;
+		debugAward(String.format("XP drop +%s (%s, chunks of %s) -> +%s credits (total %s)",
+			NumberFormatting.format(xpCredited), safeName(source), NumberFormatting.format(XP_PER_CREDIT_CHUNK),
 			NumberFormatting.format(credits), NumberFormatting.format(stateService.getCredits())));
 		return true;
+	}
+
+	private void snapshotSkillExperiencesIfLoggedIn()
+	{
+		if (client == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+
+		int[] experiences = client.getSkillExperiences();
+		System.arraycopy(experiences, 0, previousSkillXp, 0, Math.min(experiences.length, previousSkillXp.length));
+		skillXpInitialized = true;
 	}
 
 	private int applyKillCreditTuning(int baseLevel)
@@ -282,12 +276,5 @@ public class CreditAwardService
 	private boolean isOverallSkill(Skill skill)
 	{
 		return skill != null && "Overall".equalsIgnoreCase(skill.getName());
-	}
-
-	private void clearOverallXpBaselineStaging()
-	{
-		overallXpBaselineCandidate = OVERALL_XP_BASELINE_NO_CANDIDATE;
-		overallXpBaselineTicksSeen = 0;
-		overallXpBaselineLastTick = -1;
 	}
 }

@@ -55,8 +55,8 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.MessageNode;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.CommandExecuted;
+import net.runelite.api.events.FakeXpDrop;
 import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatCommandManager;
 import net.runelite.client.chat.ChatMessageManager;
@@ -228,18 +228,16 @@ public class OsrsTcgPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick event)
-	{
-		if (creditAwardService.onGameTick(event))
-		{
-			tcgPanel.refresh();
-		}
-	}
-
-	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
 		creditAwardService.onStatChanged(event);
+		tcgPanel.refresh();
+	}
+
+	@Subscribe
+	public void onFakeXpDrop(FakeXpDrop event)
+	{
+		creditAwardService.onFakeXpDrop(event);
 		tcgPanel.refresh();
 	}
 
