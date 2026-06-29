@@ -92,8 +92,20 @@ public class TcgPanel extends PluginPanel
 		"Type !tcg in chat to share your collection stats";
 
 	private static final String TCG_WELCOME_CARD_VALUES_BODY =
-		"Card values are based on each item's in-game value data. They do not reflect the real value of items relative to one another accurately; "
+		"Card score values are based on each item's in-game value data. They do not reflect the real value of items relative to one another accurately; "
 			+ "matching true market prices would require a lot of manual work.";
+
+	private static final String TCG_WELCOME_BETA_BODY =
+		"OSRS TCG is still in beta. More booster packs, features, and content are planned for future updates.";
+
+	private static final String TCG_WELCOME_DISCLAIMER_HEADER = "Disclaimer";
+
+	private static final String TCG_WELCOME_DISCLAIMER_BODY =
+		"This plugin is a fan-made minigame for fun only. Cards have no real-world or in-game monetary value and are not intended to be "
+			+ "bought, sold, or traded for real money, bonds, gold, items, or any other goods or services.\n\n"
+			+ "Do not pay for cards or collections, and do not accept payment from others for them. If someone offers to sell you cards or asks you "
+			+ "to pay for theirs, decline and report them if appropriate.\n\n"
+			+ "Trading cards with other players is done at your own risk.";
 
 	private enum Tab
 	{
@@ -1148,6 +1160,26 @@ public class TcgPanel extends PluginPanel
 		return ta;
 	}
 
+	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap)
+	{
+		int w = Math.max(120, contentMaxW);
+		JTextArea ta = new JTextArea(text);
+		ta.setEditable(false);
+		ta.setOpaque(false);
+		ta.setFocusable(false);
+		ta.setForeground(new Color(0xBBBBBB));
+		ta.setFont(FontManager.getRunescapeSmallFont());
+		ta.setLineWrap(true);
+		ta.setWrapStyleWord(true);
+		ta.setBorder(new EmptyBorder(topGap, 0, 0, 0));
+		ta.setAlignmentX(LEFT_ALIGNMENT);
+		ta.setSize(w, Short.MAX_VALUE);
+		int bodyH = ta.getPreferredSize().height;
+		ta.setPreferredSize(new Dimension(w, bodyH));
+		ta.setMaximumSize(new Dimension(w, bodyH));
+		return ta;
+	}
+
 	private static JPanel buildTcgWelcomeBlurb(int contentMaxW)
 	{
 		int w = Math.max(120, contentMaxW);
@@ -1164,53 +1196,19 @@ public class TcgPanel extends PluginPanel
 		head.setAlignmentX(LEFT_ALIGNMENT);
 		wrap.add(head);
 
-		JTextArea ta = new JTextArea(TCG_WELCOME_BODY);
-		ta.setEditable(false);
-		ta.setOpaque(false);
-		ta.setFocusable(false);
-		ta.setForeground(new Color(0xBBBBBB));
-		ta.setFont(FontManager.getRunescapeSmallFont());
-		ta.setLineWrap(true);
-		ta.setWrapStyleWord(true);
-		ta.setBorder(new EmptyBorder(6, 0, 0, 0));
-		ta.setAlignmentX(LEFT_ALIGNMENT);
-		ta.setSize(w, Short.MAX_VALUE);
-		int bodyH = ta.getPreferredSize().height;
-		ta.setPreferredSize(new Dimension(w, bodyH));
-		ta.setMaximumSize(new Dimension(w, bodyH));
-		wrap.add(ta);
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_BODY, 6));
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_TCG_COMMAND_BODY, 10));
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_CARD_VALUES_BODY, 10));
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_BETA_BODY, 10));
 
-		JTextArea tcgCmd = new JTextArea(TCG_WELCOME_TCG_COMMAND_BODY);
-		tcgCmd.setEditable(false);
-		tcgCmd.setOpaque(false);
-		tcgCmd.setFocusable(false);
-		tcgCmd.setForeground(new Color(0xBBBBBB));
-		tcgCmd.setFont(FontManager.getRunescapeSmallFont());
-		tcgCmd.setLineWrap(true);
-		tcgCmd.setWrapStyleWord(true);
-		tcgCmd.setBorder(new EmptyBorder(10, 0, 0, 0));
-		tcgCmd.setAlignmentX(LEFT_ALIGNMENT);
-		tcgCmd.setSize(w, Short.MAX_VALUE);
-		int tcgCmdH = tcgCmd.getPreferredSize().height;
-		tcgCmd.setPreferredSize(new Dimension(w, tcgCmdH));
-		tcgCmd.setMaximumSize(new Dimension(w, tcgCmdH));
-		wrap.add(tcgCmd);
+		JLabel disclaimerHead = new JLabel(TCG_WELCOME_DISCLAIMER_HEADER);
+		disclaimerHead.setForeground(Color.WHITE);
+		disclaimerHead.setFont(FontManager.getRunescapeBoldFont());
+		disclaimerHead.setAlignmentX(LEFT_ALIGNMENT);
+		disclaimerHead.setBorder(new EmptyBorder(10, 0, 0, 0));
+		wrap.add(disclaimerHead);
 
-		JTextArea cardValues = new JTextArea(TCG_WELCOME_CARD_VALUES_BODY);
-		cardValues.setEditable(false);
-		cardValues.setOpaque(false);
-		cardValues.setFocusable(false);
-		cardValues.setForeground(new Color(0xBBBBBB));
-		cardValues.setFont(FontManager.getRunescapeSmallFont());
-		cardValues.setLineWrap(true);
-		cardValues.setWrapStyleWord(true);
-		cardValues.setBorder(new EmptyBorder(10, 0, 0, 0));
-		cardValues.setAlignmentX(LEFT_ALIGNMENT);
-		cardValues.setSize(w, Short.MAX_VALUE);
-		int cardValuesH = cardValues.getPreferredSize().height;
-		cardValues.setPreferredSize(new Dimension(w, cardValuesH));
-		cardValues.setMaximumSize(new Dimension(w, cardValuesH));
-		wrap.add(cardValues);
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_DISCLAIMER_BODY, 6));
 
 		int totalH = wrap.getPreferredSize().height;
 		wrap.setPreferredSize(new Dimension(w, totalH));
