@@ -45,6 +45,7 @@ public class CardPartyTransferService
 	private final Provider<CollectionAlbumManager> collectionAlbumManagerProvider;
 
 	private final java.util.Map<String, PendingOffer> pendingOffers = new java.util.concurrent.ConcurrentHashMap<>();
+	private final java.util.Set<String> pendingInstanceIds = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<>());
 	private final java.util.Set<String> processedGiftTransferIds = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
 	private int tickCounter;
 
@@ -192,8 +193,13 @@ public class CardPartyTransferService
 			senderDebugLogging = stateService.isDebugLogging();
 		}
 
+		if (!pendingInstanceIds.add(instanceId))
+		{
+			return "That card copy is already being sent.";
+		}
+
 		String transferId = java.util.UUID.randomUUID().toString();
-		pendingOffers.put(transferId, new PendingOffer(name, foil, inst.getInstanceId(), System.currentTimeMillis()));
+		pendingOffers.put(transferId, new PendingOffer(name, foil, instanceId, System.currentTimeMillis()));
 
 		try
 		{
@@ -215,6 +221,7 @@ public class CardPartyTransferService
 		catch (Exception ex)
 		{
 			pendingOffers.remove(transferId);
+			pendingInstanceIds.remove(instanceId);
 			log.debug("Failed to send party card gift", ex);
 			return "Could not send (party connection).";
 		}
@@ -234,6 +241,7 @@ public class CardPartyTransferService
 			PendingOffer p = pendingOffers.get(tid);
 			if (p != null && now - p.createdAtMs > PENDING_TTL_MS && pendingOffers.remove(tid, p))
 			{
+				pendingInstanceIds.remove(p.cardInstanceId);
 				TcgPluginGameMessages.queueGoldPluginGameMessage(chatMessageManager,
 					"Card send timed out (no response from recipient).");
 			}
@@ -366,6 +374,7 @@ public class CardPartyTransferService
 		{
 			return;
 		}
+		pendingInstanceIds.remove(pending.cardInstanceId);
 
 		PartyMember responder = partyService.getMemberById(msg.getMemberId());
 		String target = responder != null && responder.getDisplayName() != null && !responder.getDisplayName().trim().isEmpty()

@@ -1393,11 +1393,14 @@ public final class CollectionAlbumWindow extends JFrame
 		{
 			return;
 		}
+		sendCardBtn.setEnabled(false);
 		long recipientId = partyMemberIds.get(pi);
-		String err = cardPartyTransferService.sendGift(recipientId, sendChosenInstanceId);
+		String instanceId = sendChosenInstanceId;
+		String err = cardPartyTransferService.sendGift(recipientId, instanceId);
 		if (err != null)
 		{
 			sendStatusLabel.setText(err);
+			updateSouthBarButtons();
 		}
 		else
 		{
