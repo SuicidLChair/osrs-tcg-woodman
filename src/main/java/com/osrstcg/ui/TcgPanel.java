@@ -140,6 +140,7 @@ public class TcgPanel extends PluginPanel
 	private final JPanel welcomeContent = new JPanel();
 	private final JPanel overviewContent = new JPanel();
 	private final JPanel packsContent = new JPanel();
+	private final JScrollPane welcomeScrollPane = new JScrollPane(welcomeContent);
 	private final JScrollPane shopScrollPane = new JScrollPane(packsContent);
 	private final JPanel footerPanel = new JPanel();
 	private final JPanel titlePanel;
@@ -150,7 +151,6 @@ public class TcgPanel extends PluginPanel
 	private Tab selectedTab = Tab.OVERVIEW;
 	/** After first in-world refresh, {@link #selectedTab} is only user-driven unless reset clears progress. */
 	private boolean defaultTabSelectionInitialized;
-	private boolean pendingRefresh;
 	private boolean refreshQueued;
 	private volatile boolean panelVisible;
 	private int lastPanelWidthForLayout = -1;
@@ -211,17 +211,12 @@ public class TcgPanel extends PluginPanel
 		initializeTabContentPanel(welcomeContent);
 		initializeTabContentPanel(overviewContent);
 		initializeTabContentPanel(packsContent);
-		content.add(welcomeContent, Tab.WELCOME.name());
+		content.add(welcomeScrollPane, Tab.WELCOME.name());
 		content.add(overviewContent, Tab.OVERVIEW.name());
 		content.add(shopScrollPane, Tab.SHOP.name());
 
-		shopScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		shopScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		shopScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		shopScrollPane.setOpaque(false);
-		shopScrollPane.getViewport().setOpaque(false);
-		shopScrollPane.setWheelScrollingEnabled(true);
-		shopScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		configureTabScrollPane(welcomeScrollPane);
+		configureTabScrollPane(shopScrollPane);
 
 		populateFooterPanel();
 
@@ -360,7 +355,6 @@ public class TcgPanel extends PluginPanel
 	{
 		if (!panelVisible)
 		{
-			pendingRefresh = true;
 			return;
 		}
 
@@ -370,7 +364,6 @@ public class TcgPanel extends PluginPanel
 			return;
 		}
 
-		pendingRefresh = false;
 		refreshNow();
 	}
 
@@ -382,7 +375,6 @@ public class TcgPanel extends PluginPanel
 	{
 		if (!panelVisible)
 		{
-			pendingRefresh = true;
 			return;
 		}
 		if (packRevealService.isActive())
@@ -435,10 +427,8 @@ public class TcgPanel extends PluginPanel
 		}
 		if (!panelVisible)
 		{
-			pendingRefresh = true;
 			return;
 		}
-		pendingRefresh = false;
 		ensureRootAttached();
 		if (shouldShowLoggedOutPrompt())
 		{
@@ -765,7 +755,6 @@ public class TcgPanel extends PluginPanel
 	{
 		int w = liveSidebarContentWidth();
 		target.add(buildTcgWelcomeBlurb(w));
-		target.add(Box.createVerticalGlue());
 	}
 
 	private void renderOverviewTab(JPanel target)
@@ -1162,7 +1151,7 @@ public class TcgPanel extends PluginPanel
 
 	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap)
 	{
-		int w = Math.max(120, contentMaxW);
+		int w = Math.max(1, contentMaxW);
 		JTextArea ta = new JTextArea(text);
 		ta.setEditable(false);
 		ta.setOpaque(false);
@@ -1182,7 +1171,7 @@ public class TcgPanel extends PluginPanel
 
 	private static JPanel buildTcgWelcomeBlurb(int contentMaxW)
 	{
-		int w = Math.max(120, contentMaxW);
+		int w = Math.max(1, contentMaxW);
 
 		JPanel wrap = new JPanel();
 		wrap.setLayout(new BoxLayout(wrap, BoxLayout.Y_AXIS));
@@ -1241,7 +1230,18 @@ public class TcgPanel extends PluginPanel
 			return sidebarInnerWidth();
 		}
 		int mainPanelHorizontalPad = 12;
-		return Math.max(sidebarInnerWidth(), raw - mainPanelHorizontalPad);
+		return Math.max(80, raw - mainPanelHorizontalPad);
+	}
+
+	private static void configureTabScrollPane(JScrollPane scrollPane)
+	{
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setWheelScrollingEnabled(true);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 	}
 
 	private static JPanel buildMultiplierGrid(int contentW, JSpinner levelSpin, JSpinner killSpin, JSpinner xpSpin,
