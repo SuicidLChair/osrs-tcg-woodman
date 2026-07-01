@@ -104184,18 +104184,6 @@
     "maxHit": "9 (melee), 20x2 (ranged/magic)"
   },
   {
-    "name": "Gemstone Crab",
-    "level": 160,
-    "category": [
-      "Monster",
-      "Varlamore"
-    ],
-    "imageUrl": "https://oldschool.runescape.wiki/images/thumb/Gemstone_Crab_Shell.png/130px-Gemstone_Crab_Shell.png",
-    "examine": "The sparkling shell of a giant crab.",
-    "attackStyle": "Crush",
-    "maxHit": "1"
-  },
-  {
     "name": "General Khazard",
     "level": 142,
     "category": [
