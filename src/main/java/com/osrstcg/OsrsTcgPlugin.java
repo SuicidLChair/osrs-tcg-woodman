@@ -397,6 +397,19 @@ public class OsrsTcgPlugin extends Plugin
 		{
 			queueGameMessage("[OSRS TCG] Restored progress from file backup.");
 		}
+		else if (!loadResult.isDebugResetOnLoad())
+		{
+			queueLoadSuccessMessage();
+		}
+	}
+
+	private void queueLoadSuccessMessage()
+	{
+		if (client == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		queueGameMessage("[OSRS TCG] Collection successfully loaded.");
 	}
 
 	private void queueGameMessage(String message)
