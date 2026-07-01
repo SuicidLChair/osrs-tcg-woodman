@@ -880,6 +880,8 @@ public class TcgPanel extends PluginPanel
 		target.add(Box.createRigidArea(new Dimension(0, 6)));
 		target.add(statPanel("Unique cards", format(m.uniqueOwned) + " / " + format(m.totalCardPool)));
 		target.add(Box.createRigidArea(new Dimension(0, 6)));
+		target.add(statPanel("Unique foil cards", format(m.uniqueFoilOwned) + " / " + format(m.totalCardPool)));
+		target.add(Box.createRigidArea(new Dimension(0, 6)));
 		target.add(statPanel("Total cards", format(m.totalCardsOwned)));
 		target.add(Box.createRigidArea(new Dimension(0, 6)));
 		target.add(statPanel("Foil cards", format(m.foilOwned)));
@@ -922,16 +924,18 @@ public class TcgPanel extends PluginPanel
 	private static final class OverviewMetrics
 	{
 		private final int uniqueOwned;
+		private final int uniqueFoilOwned;
 		private final int totalCardsOwned;
 		private final long foilOwned;
 		private final int totalCardPool;
 		private final double completionPct;
 		private final long collectionScore;
 
-		private OverviewMetrics(int uniqueOwned, int totalCardsOwned, long foilOwned, int totalCardPool,
-			double completionPct, long collectionScore)
+		private OverviewMetrics(int uniqueOwned, int uniqueFoilOwned, int totalCardsOwned, long foilOwned,
+			int totalCardPool, double completionPct, long collectionScore)
 		{
 			this.uniqueOwned = uniqueOwned;
+			this.uniqueFoilOwned = uniqueFoilOwned;
 			this.totalCardsOwned = totalCardsOwned;
 			this.foilOwned = foilOwned;
 			this.totalCardPool = totalCardPool;
@@ -965,6 +969,16 @@ public class TcgPanel extends PluginPanel
 					&& rollPoolNames.contains(e.getKey().getCardName()))
 				.mapToLong(e -> e.getValue() == null ? 0L : e.getValue())
 				.sum();
+			int uniqueFoilOwned = (int) owned.keySet().stream()
+				.filter(k -> k.isFoil()
+					&& k.getCardName() != null
+					&& rollPoolNames.contains(k.getCardName()))
+				.filter(k ->
+				{
+					Integer qty = owned.get(k);
+					return qty != null && qty > 0;
+				})
+				.count();
 			int totalCardPool = rollPool.size();
 			double completion = totalCardPool <= 0 ? 0.0d : (100.0d * uniqueOwned) / totalCardPool;
 
@@ -992,7 +1006,8 @@ public class TcgPanel extends PluginPanel
 				boolean hasFoil = hasFoilOwned(owned, cardName);
 				collectionScore += hasFoil ? RarityMath.foilAdjustedScoreRounded(def) : Math.round(RarityMath.score(def));
 			}
-			return new OverviewMetrics(uniqueOwned, totalCardsOwned, foilOwned, totalCardPool, completion, collectionScore);
+			return new OverviewMetrics(uniqueOwned, uniqueFoilOwned, totalCardsOwned, foilOwned, totalCardPool,
+				completion, collectionScore);
 		}
 	}
 
