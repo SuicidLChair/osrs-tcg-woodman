@@ -352,7 +352,7 @@ final class CollectionAlbumGridPanel extends JPanel
 		int ff = s.foilQty();
 		if (nf > 0 && ff > 0)
 		{
-			return nf + "x normal, " + ff + "x foil";
+			return ff + "x foil, " + nf + "x normal";
 		}
 		if (nf > 0)
 		{
