@@ -116,6 +116,7 @@ public final class CollectionAlbumWindow extends JFrame
 	private final JComboBox<String> rarityCombo = new JComboBox<>();
 	private final JRadioButton radCardsAll = new JRadioButton("All cards", true);
 	private final JRadioButton radObtained = new JRadioButton("Obtained only");
+	private final JRadioButton radDuplicates = new JRadioButton("Duplicates only");
 	private final JRadioButton radMissing = new JRadioButton("Missing only");
 	private final JCheckBox foilOnlyCheck = new JCheckBox("Foil only");
 	private final JButton prevBtn = new JButton("< Prev");
@@ -263,9 +264,11 @@ public final class CollectionAlbumWindow extends JFrame
 		ButtonGroup ownGroup = new ButtonGroup();
 		ownGroup.add(radCardsAll);
 		ownGroup.add(radObtained);
+		ownGroup.add(radDuplicates);
 		ownGroup.add(radMissing);
 		styleRadio(radCardsAll);
 		styleRadio(radObtained);
+		styleRadio(radDuplicates);
 		styleRadio(radMissing);
 		radCardsAll.addActionListener(e ->
 		{
@@ -273,6 +276,11 @@ public final class CollectionAlbumWindow extends JFrame
 			rebuildModel();
 		});
 		radObtained.addActionListener(e ->
+		{
+			pageIndex = 0;
+			rebuildModel();
+		});
+		radDuplicates.addActionListener(e ->
 		{
 			pageIndex = 0;
 			rebuildModel();
@@ -338,6 +346,7 @@ public final class CollectionAlbumWindow extends JFrame
 		filterRow.add(rarityCombo);
 		filterRow.add(radCardsAll);
 		filterRow.add(radObtained);
+		filterRow.add(radDuplicates);
 		filterRow.add(radMissing);
 		filterRow.add(Box.createHorizontalStrut(4));
 		filterRow.add(foilOnlyCheck);
@@ -623,6 +632,7 @@ public final class CollectionAlbumWindow extends JFrame
 		pageLabel.setFont(small);
 		radCardsAll.setFont(small);
 		radObtained.setFont(small);
+		radDuplicates.setFont(small);
 		radMissing.setFont(small);
 		foilOnlyCheck.setFont(small);
 		partyMemberCombo.setFont(small);
@@ -844,6 +854,10 @@ public final class CollectionAlbumWindow extends JFrame
 		{
 			working.removeIf(c -> !collected.contains(c.getName()));
 		}
+		else if (radDuplicates.isSelected())
+		{
+			working.removeIf(c -> !hasDuplicateOwned(owned, c.getName()));
+		}
 		else if (radMissing.isSelected())
 		{
 			working.removeIf(c -> collected.contains(c.getName()));
@@ -1033,6 +1047,27 @@ public final class CollectionAlbumWindow extends JFrame
 		}
 		Integer n = owned.get(new CardCollectionKey(cardName, true));
 		return n != null && n > 0;
+	}
+
+	/** True when combined foil + non-foil quantity for the card name is greater than one. */
+	private static boolean hasDuplicateOwned(Map<CardCollectionKey, Integer> owned, String cardName)
+	{
+		if (cardName == null)
+		{
+			return false;
+		}
+		int total = 0;
+		Integer normal = owned.get(new CardCollectionKey(cardName, false));
+		Integer foil = owned.get(new CardCollectionKey(cardName, true));
+		if (normal != null)
+		{
+			total += normal;
+		}
+		if (foil != null)
+		{
+			total += foil;
+		}
+		return total > 1;
 	}
 
 	private String singleCopyAlbumHoverTooltip(String cardName, int nQty, int fQty, boolean ownAny)

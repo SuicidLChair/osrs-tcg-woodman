@@ -10,7 +10,6 @@ The plugin features party plugin integration that allows you to trade cards with
 
 ## Planned Features
 
-- More filtering options for album view
 - Ability to lock individual cards from being sold by bulk sell
 - Webhook or [Dink](https://github.com/pajlads/DinkPlugin) integration
 - More booster packs
