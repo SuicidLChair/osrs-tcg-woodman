@@ -22,12 +22,15 @@ import com.osrstcg.util.NumberFormatting;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.net.URL;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,6 +57,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JViewport;
+import javax.swing.Scrollable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -68,6 +73,7 @@ import net.runelite.api.GameState;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
+import net.runelite.client.util.LinkBrowser;
 
 @Slf4j
 @Singleton
@@ -212,7 +218,8 @@ public class TcgPanel extends PluginPanel
 
 		content.setLayout(contentLayout);
 		content.setOpaque(false);
-		initializeTabContentPanel(welcomeContent);
+		welcomeContent.setLayout(new BorderLayout());
+		welcomeContent.setOpaque(false);
 		initializeTabContentPanel(overviewContent);
 		initializeTabContentPanel(packsContent);
 		content.add(welcomeScrollPane, Tab.WELCOME.name());
@@ -748,7 +755,13 @@ public class TcgPanel extends PluginPanel
 	private void renderWelcomeTab(JPanel target)
 	{
 		int w = liveSidebarContentWidth();
-		target.add(buildTcgWelcomeBlurb(w));
+		target.add(buildTcgWelcomeBlurb(w), BorderLayout.NORTH);
+
+		JButton discordButton = createDiscordButton(w);
+		if (discordButton != null)
+		{
+			target.add(discordButton, BorderLayout.SOUTH);
+		}
 	}
 
 	private void renderOverviewTab(JPanel target)
@@ -1160,10 +1173,20 @@ public class TcgPanel extends PluginPanel
 
 	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap)
 	{
-		return buildWelcomeTextArea(contentMaxW, text, topGap, new Color(0xBBBBBB));
+		return buildWelcomeTextArea(contentMaxW, text, topGap, new Color(0xBBBBBB), 0);
+	}
+
+	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap, int bottomGap)
+	{
+		return buildWelcomeTextArea(contentMaxW, text, topGap, new Color(0xBBBBBB), bottomGap);
 	}
 
 	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap, Color foreground)
+	{
+		return buildWelcomeTextArea(contentMaxW, text, topGap, foreground, 0);
+	}
+
+	private static JTextArea buildWelcomeTextArea(int contentMaxW, String text, int topGap, Color foreground, int bottomGap)
 	{
 		int w = Math.max(1, contentMaxW);
 		JTextArea ta = new JTextArea(text);
@@ -1174,7 +1197,7 @@ public class TcgPanel extends PluginPanel
 		ta.setFont(FontManager.getRunescapeSmallFont());
 		ta.setLineWrap(true);
 		ta.setWrapStyleWord(true);
-		ta.setBorder(new EmptyBorder(topGap, 0, 0, 0));
+		ta.setBorder(new EmptyBorder(topGap, 0, bottomGap, 0));
 		ta.setAlignmentX(LEFT_ALIGNMENT);
 		ta.setSize(w, Short.MAX_VALUE);
 		int bodyH = ta.getPreferredSize().height;
@@ -1212,7 +1235,7 @@ public class TcgPanel extends PluginPanel
 		disclaimerHead.setBorder(new EmptyBorder(10, 0, 0, 0));
 		wrap.add(disclaimerHead);
 
-		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_DISCLAIMER_BODY, 6));
+		wrap.add(buildWelcomeTextArea(w, TCG_WELCOME_DISCLAIMER_BODY, 6, 6));
 
 		int totalH = wrap.getPreferredSize().height;
 		wrap.setPreferredSize(new Dimension(w, totalH));
@@ -1810,5 +1833,35 @@ public class TcgPanel extends PluginPanel
 		panel.setAlignmentX(LEFT_ALIGNMENT);
 		Dimension preferred = panel.getPreferredSize();
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, preferred.height));
+	}
+
+	private static JButton createDiscordButton(int contentMaxW)
+	{
+		URL imgUrl = TcgPanel.class.getResource("/Discord-Logo-White.png");
+		if (imgUrl != null)
+		{
+			int buttonH = 36;
+			int hPad = 14;
+			int vPad = 8;
+
+			ImageIcon rawIcon = new ImageIcon(imgUrl);
+			int iconH = buttonH - (2 * vPad);
+			int iconW = Math.max(1, Math.round(iconH * (rawIcon.getIconWidth() / (float) rawIcon.getIconHeight())));
+			Image scaled = rawIcon.getImage().getScaledInstance(iconW, iconH, Image.SCALE_SMOOTH);
+
+			var discordButton = new JButton(new ImageIcon(scaled));
+			discordButton.setToolTipText("Join our Discord!");
+			discordButton.setBorder(new CompoundBorder(
+				new MatteBorder(1, 1, 1, 1, ColorScheme.LIGHT_GRAY_COLOR.darker()),
+				new EmptyBorder(vPad, hPad, vPad, hPad)
+			));
+			Dimension size = new Dimension(Math.max(1, contentMaxW), buttonH);
+			discordButton.setPreferredSize(size);
+			discordButton.setMaximumSize(size);
+			discordButton.addActionListener(e -> LinkBrowser.browse("https://discord.gg/P4pPu6RnCj"));
+			return discordButton;
+		}
+
+		return null;
 	}
 }
