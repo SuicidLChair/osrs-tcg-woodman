@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.Experience;
 import net.runelite.api.GameState;
 import net.runelite.api.Skill;
 import net.runelite.api.events.FakeXpDrop;
@@ -148,13 +149,22 @@ public class CreditAwardService
 			return;
 		}
 
+		Skill skill = event.getSkill();
+		if (!isGenuineMaxedSkillFakeXpDrop(skill))
+		{
+			debugAward(String.format(
+				"Ignored fake XP drop for %s (skill below %s XP)",
+				skill.getName(), NumberFormatting.format(Experience.MAX_SKILL_XP)));
+			return;
+		}
+
 		int xp = event.getXp();
 		if (xp <= 0 || xp >= FAKE_XP_DROP_SANITY_CAP)
 		{
 			return;
 		}
 
-		applyXpGain(xp, event.getSkill().getName() + " drop");
+		applyXpGain(xp, skill.getName() + " drop");
 	}
 
 	/** Call when the plugin is enabled mid-session so stats are not credited against empty baselines. */
@@ -403,5 +413,16 @@ public class CreditAwardService
 	private boolean isOverallSkill(Skill skill)
 	{
 		return skill != null && "Overall".equalsIgnoreCase(skill.getName());
+	}
+
+
+	private boolean isGenuineMaxedSkillFakeXpDrop(Skill skill)
+	{
+		if (client == null || isOverallSkill(skill))
+		{
+			return false;
+		}
+
+		return client.getSkillExperience(skill) >= Experience.MAX_SKILL_XP;
 	}
 }
