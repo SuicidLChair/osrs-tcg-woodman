@@ -108,20 +108,31 @@ public interface OsrsTcgConfig extends Config
 
 	@ConfigItem(
 		keyName = "enableSounds",
-		name = "Enable sounds",
-		description = "Play custom plugin sounds for interfaces.",
+		name = "Enable pack opening sounds",
+		description = "Play custom plugin sounds during pack openings (deal, flip, reveal, hum, and apex hover).",
 		position = 10
 	)
 	default boolean enableSounds()
 	{
 		return true;
 	}
-	
+
+	@ConfigItem(
+		keyName = "enableTransferSound",
+		name = "Enable transfer sound",
+		description = "Play a sound when a party card transfer completes.",
+		position = 11
+	)
+	default boolean enableTransferSound()
+	{
+		return true;
+	}
+
 	@ConfigItem(
 		keyName = "packRarityHighlight",
 		name = "Rarity Highlight",
 		description = "Peek at the rarity of the card when hovering over an unflipped card during pack openings.",
-		position = 11
+		position = 12
 	)
 	default boolean packRarityHighlight()
 	{
@@ -134,7 +145,7 @@ public interface OsrsTcgConfig extends Config
 		description = "Keep up to 50 file backups under .runelite/OSRS-TCG/backups. "
 			+ "Written on logout, plugin load/unload, and ::tcg-save. "
 			+ "Used automatically when profile configuration saves fail to load.",
-		position = 12
+		position = 13
 	)
 	default boolean enableFileBackups()
 	{
@@ -145,7 +156,7 @@ public interface OsrsTcgConfig extends Config
 		keyName = "safeMode",
 		name = "Safe-mode",
 		description = "Block opening booster packs while in combat. If a pack reveal is open when combat starts, close it immediately and list pulled cards in chat (cards remain in your collection).",
-		position = 13
+		position = 14
 	)
 	default boolean safeMode()
 	{
@@ -157,7 +168,7 @@ public interface OsrsTcgConfig extends Config
 		name = "Chat prefix colour",
 		description = "Choose the colour used for the [OSRS TCG] chat prefix. "
 			+ "Written on plugin load/unload",
-		position = 14
+		position = 15
 	)
 	default Color chatPrefixColor()
 	{

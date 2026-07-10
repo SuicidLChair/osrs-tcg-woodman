@@ -95,7 +95,7 @@ public class PackRevealSoundService
 	/** One-shot {@code transfer.wav} when a party card transfer completes (sender and recipient); half default gain. */
 	public synchronized void playTransferSuccess()
 	{
-		if (!config.enableSounds() || transferSuccessOpenFailed)
+		if (!config.enableTransferSound() || transferSuccessOpenFailed)
 		{
 			return;
 		}
