@@ -3,10 +3,7 @@ package com.osrstcg.service;
 import com.osrstcg.util.PlayerCombatUtil;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.runelite.api.Actor;
 import net.runelite.api.Client;
-import net.runelite.api.NPC;
-import net.runelite.api.Player;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.InteractingChanged;
@@ -60,7 +57,7 @@ public final class PlayerCombatMonitor
 		{
 			return;
 		}
-		if (event.getSource() == client.getLocalPlayer() && isCombatTarget(event.getTarget()))
+		if (event.getSource() == client.getLocalPlayer() && PlayerCombatUtil.isCombatTarget(event.getTarget()))
 		{
 			localPlayerInCombat = true;
 		}
@@ -91,8 +88,4 @@ public final class PlayerCombatMonitor
 		incomingDamageGraceUntilTick = -1;
 	}
 
-	private static boolean isCombatTarget(Actor actor)
-	{
-		return actor instanceof NPC || actor instanceof Player;
-	}
 }

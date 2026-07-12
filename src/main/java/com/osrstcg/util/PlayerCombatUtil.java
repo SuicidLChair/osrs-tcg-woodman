@@ -34,7 +34,7 @@ public final class PlayerCombatUtil
 
 		for (NPC npc : client.getNpcs())
 		{
-			if (npc != null && npc.getInteracting() == local)
+			if (npc != null && !PetNpcIds.isPetNpc(npc) && npc.getInteracting() == local)
 			{
 				return true;
 			}
@@ -51,8 +51,16 @@ public final class PlayerCombatUtil
 		return false;
 	}
 
-	private static boolean isCombatTarget(Actor actor)
+	public static boolean isCombatTarget(Actor actor)
 	{
-		return actor instanceof NPC || actor instanceof Player;
+		if (actor instanceof Player)
+		{
+			return true;
+		}
+		if (actor instanceof NPC)
+		{
+			return !PetNpcIds.isPetNpc((NPC) actor);
+		}
+		return false;
 	}
 }
