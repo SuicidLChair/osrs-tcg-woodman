@@ -2,3 +2,6 @@
 build
 RuneLiteAPI
 bin/
+
+# Debug-only pack definitions
+src/main/resources/PacksDebug.json
