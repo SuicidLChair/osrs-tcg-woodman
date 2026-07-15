@@ -8,8 +8,6 @@ Join the community on [Discord](https://discord.gg/P4pPu6RnCj).
 
 ![Pack opening reveal](https://i.imgur.com/ok8mxK9.png)
 
-![Collection album](https://i.imgur.com/H28xZfZ.png)
-
 ## Planned Features
 
 - More booster packs
