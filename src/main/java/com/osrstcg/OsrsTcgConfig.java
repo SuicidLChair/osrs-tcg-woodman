@@ -107,6 +107,17 @@ public interface OsrsTcgConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "shopNotifications",
+		name = "Shop notifications",
+		description = "Send a game message when you earn enough credits to buy a booster pack.",
+		position = 9
+	)
+	default boolean shopNotifications()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "enableSounds",
 		name = "Enable pack opening sounds",
 		description = "Play custom plugin sounds during pack openings (deal, flip, reveal, hum, and apex hover).",
