@@ -4,6 +4,7 @@ import com.osrstcg.ui.TcgPanel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
@@ -56,6 +57,13 @@ public final class GameMessageCreditTracker
 
 	private static final long SHELLBANE_GRYPHON_KILL_CREDITS = 235L;
 	private static final String SHELLBANE_GRYPHON_KILL_PREFIX = "Your Shellbane Gryphon kill count is:";
+
+	private static final long BEGINNER_TREASURE_TRAIL_CREDITS = 500L;
+	private static final long EASY_TREASURE_TRAIL_CREDITS = 1_000L;
+	private static final long MEDIUM_TREASURE_TRAIL_CREDITS = 2_000L;
+	private static final long HARD_TREASURE_TRAIL_CREDITS = 3_000L;
+	private static final long ELITE_TREASURE_TRAIL_CREDITS = 4_000L;
+	private static final long MASTER_TREASURE_TRAIL_CREDITS = 5_000L;
 
 	private static final List<CreditRule> CREDIT_RULES = buildCreditRules();
 
@@ -114,7 +122,22 @@ public final class GameMessageCreditTracker
 			SHELLBANE_GRYPHON_KILL_PREFIX,
 			SHELLBANE_GRYPHON_KILL_CREDITS,
 			"Shellbane Gryphon kill"));
+		rules.add(treasureTrailCompletion("beginner", BEGINNER_TREASURE_TRAIL_CREDITS));
+		rules.add(treasureTrailCompletion("easy", EASY_TREASURE_TRAIL_CREDITS));
+		rules.add(treasureTrailCompletion("medium", MEDIUM_TREASURE_TRAIL_CREDITS));
+		rules.add(treasureTrailCompletion("hard", HARD_TREASURE_TRAIL_CREDITS));
+		rules.add(treasureTrailCompletion("elite", ELITE_TREASURE_TRAIL_CREDITS));
+		rules.add(treasureTrailCompletion("master", MASTER_TREASURE_TRAIL_CREDITS));
 		return List.copyOf(rules);
+	}
+
+	/** Matches {@code You have completed N {difficulty} Treasure Trail(s).} */
+	private static CreditRule treasureTrailCompletion(String difficulty, long credits)
+	{
+		String capitalized = Character.toUpperCase(difficulty.charAt(0)) + difficulty.substring(1);
+		Pattern pattern = Pattern.compile(
+			"^You have completed \\d+ " + Pattern.quote(difficulty) + " Treasure Trails?\\.$");
+		return CreditRule.pattern(pattern, credits, capitalized + " Treasure Trail completion");
 	}
 
 	private final CreditAwardService creditAwardService;
@@ -162,24 +185,39 @@ public final class GameMessageCreditTracker
 	private static final class CreditRule
 	{
 		private final String messagePrefix;
+		private final Pattern messagePattern;
 		private final long credits;
 		private final String reason;
 
-		private CreditRule(String messagePrefix, long credits, String reason)
+		private CreditRule(String messagePrefix, Pattern messagePattern, long credits, String reason)
 		{
 			this.messagePrefix = messagePrefix;
+			this.messagePattern = messagePattern;
 			this.credits = credits;
 			this.reason = reason;
 		}
 
 		static CreditRule prefix(String messagePrefix, long credits, String reason)
 		{
-			return new CreditRule(messagePrefix, credits, reason);
+			return new CreditRule(messagePrefix, null, credits, reason);
+		}
+
+		static CreditRule pattern(Pattern messagePattern, long credits, String reason)
+		{
+			return new CreditRule(null, messagePattern, credits, reason);
 		}
 
 		boolean matches(String message)
 		{
-			return message != null && message.startsWith(messagePrefix);
+			if (message == null)
+			{
+				return false;
+			}
+			if (messagePattern != null)
+			{
+				return messagePattern.matcher(message).matches();
+			}
+			return message.startsWith(messagePrefix);
 		}
 
 		long getCredits()
