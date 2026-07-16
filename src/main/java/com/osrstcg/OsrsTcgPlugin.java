@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import com.osrstcg.model.OwnedCardInstance;
 import com.osrstcg.model.TcgPublicStats;
+import com.osrstcg.overlay.CreditsInfoboxOverlay;
 import com.osrstcg.overlay.PackRevealInputListener;
 import com.osrstcg.overlay.PackRevealOverlay;
 import com.osrstcg.service.CardPartyTransferService;
@@ -118,6 +119,8 @@ public class OsrsTcgPlugin extends Plugin
 	@Inject
 	private PackRevealOverlay packRevealOverlay;
 	@Inject
+	private CreditsInfoboxOverlay creditsInfoboxOverlay;
+	@Inject
 	private PackRevealInputListener packRevealInputListener;
 	@Inject
 	private OverlayManager overlayManager;
@@ -182,6 +185,7 @@ public class OsrsTcgPlugin extends Plugin
 			.build();
 		clientToolbar.addNavigation(navigationButton);
 		overlayManager.add(packRevealOverlay);
+		overlayManager.add(creditsInfoboxOverlay);
 		mouseManager.registerMouseListener(packRevealInputListener);
 		mouseManager.registerMouseWheelListener(packRevealInputListener);
 		keyManager.registerKeyListener(packRevealInputListener);
@@ -229,6 +233,7 @@ public class OsrsTcgPlugin extends Plugin
 		chatCommandManager.unregisterCommand(TCG_PUBLIC_CHAT_COMMAND);
 		npcKillCreditTracker.shutdown();
 		overlayManager.remove(packRevealOverlay);
+		overlayManager.remove(creditsInfoboxOverlay);
 		mouseManager.unregisterMouseListener(packRevealInputListener);
 		mouseManager.unregisterMouseWheelListener(packRevealInputListener);
 		keyManager.unregisterKeyListener(packRevealInputListener);

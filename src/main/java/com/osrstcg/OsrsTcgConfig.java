@@ -107,6 +107,18 @@ public interface OsrsTcgConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "creditsInfobox",
+		name = "Credits infobox",
+		description = "Show a movable overlay with your credits and credits/h "
+			+ "(from gains in the last 5 minutes, after at least 3 credit drops). Alt+drag to reposition.",
+		position = 8
+	)
+	default boolean creditsInfobox()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "shopNotifications",
 		name = "Shop notifications",
 		description = "Send a game message when you earn enough credits to buy a booster pack.",
