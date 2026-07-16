@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
@@ -57,6 +58,8 @@ public class WikiImageCacheService
 			}
 		});
 	private final Map<String, CompletableFuture<BufferedImage>> loadingFutures = new ConcurrentHashMap<>();
+	/** URLs that failed to load; skip re-fetching on the overlay/album paint path. */
+	private final Set<String> failedUrls = ConcurrentHashMap.newKeySet();
 
 	@Inject
 	public WikiImageCacheService(OkHttpClient okHttpClient)
@@ -87,7 +90,7 @@ public class WikiImageCacheService
 		}
 
 		String normalized = normalizeUrl(url);
-		if (normalized.isEmpty() || memoryCache.containsKey(normalized))
+		if (normalized.isEmpty() || memoryCache.containsKey(normalized) || failedUrls.contains(normalized))
 		{
 			return false;
 		}
@@ -117,6 +120,11 @@ public class WikiImageCacheService
 		return normalized;
 	}
 
+	/**
+	 * Returns a cached image if present. Safe to call from overlay/UI paint paths:
+	 * only reads the memory cache and may kick off a background load — never blocks
+	 * on network/disk and never writes the cache on this thread.
+	 */
 	public BufferedImage getCached(String url)
 	{
 		if (url == null)
@@ -136,32 +144,20 @@ public class WikiImageCacheService
 			return cached;
 		}
 
-		CompletableFuture<BufferedImage> future = loadingFutures.get(normalized);
-		if (future == null || !future.isDone())
+		if (!failedUrls.contains(normalized))
 		{
 			ensureLoad(normalized);
-			return null;
 		}
-
-		try
-		{
-			BufferedImage image = future.getNow(null);
-			if (image != null)
-			{
-				memoryCache.put(normalized, image);
-			}
-			return image;
-		}
-		catch (RuntimeException ex)
-		{
-			return null;
-		}
+		return null;
 	}
 
 	private void ensureLoad(String rawUrl)
 	{
 		String url = normalizeUrl(rawUrl);
-		if (url.isEmpty() || memoryCache.containsKey(url) || loadingFutures.containsKey(url))
+		if (url.isEmpty()
+			|| memoryCache.containsKey(url)
+			|| failedUrls.contains(url)
+			|| loadingFutures.containsKey(url))
 		{
 			return;
 		}
@@ -181,11 +177,18 @@ public class WikiImageCacheService
 			})
 			.whenComplete((image, ex) ->
 			{
-				loadingFutures.remove(key);
+				// Populate cache before removing the in-flight future so paint reads never
+				// observe "not loading" and "not cached" at the same time.
 				if (image != null)
 				{
+					failedUrls.remove(key);
 					memoryCache.put(key, image);
 				}
+				else
+				{
+					failedUrls.add(key);
+				}
+				loadingFutures.remove(key);
 			}));
 	}
 
