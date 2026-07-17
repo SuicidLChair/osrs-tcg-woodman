@@ -20,6 +20,7 @@ import com.osrstcg.service.RollPoolFilter;
 import com.osrstcg.service.TcgStateService;
 import com.osrstcg.ui.collectionalbum.CollectionAlbumManager;
 import com.osrstcg.util.NumberFormatting;
+import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -36,6 +37,7 @@ import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -63,6 +65,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -1463,10 +1466,10 @@ public class TcgPanel extends PluginPanel
 		refresh();
 	}
 
-	/** Usable width inside the plugin sidebar (matches shop grid / booster buttons). */
+	/** Usable width inside the plugin sidebar (matches shop grid / booster buttons); leaves room for the tab scroll panes' vertical scrollbar so content isn't clipped once it appears. */
 	private static int sidebarInnerWidth()
 	{
-		return Math.max(160, PluginPanel.PANEL_WIDTH - 2 * PluginPanel.BORDER_OFFSET);
+		return Math.max(160, PluginPanel.PANEL_WIDTH - 2 * PluginPanel.BORDER_OFFSET - PluginPanel.SCROLLBAR_WIDTH);
 	}
 
 	/**
@@ -1482,18 +1485,32 @@ public class TcgPanel extends PluginPanel
 			return sidebarInnerWidth();
 		}
 		int mainPanelHorizontalPad = 12;
-		return Math.max(80, raw - mainPanelHorizontalPad);
+		return Math.max(80, raw - mainPanelHorizontalPad - PluginPanel.SCROLLBAR_WIDTH);
 	}
 
 	private static void configureTabScrollPane(JScrollPane scrollPane)
 	{
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setWheelScrollingEnabled(true);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+		JScrollBar vbar = scrollPane.getVerticalScrollBar();
+		vbar.setUnitIncrement(16);
+		vbar.setOpaque(false);
+		vbar.putClientProperty(FlatClientProperties.STYLE,
+			"width:6; trackArc:999; thumbArc:999; trackInsets:0,2,0,2; thumbInsets:0,2,0,2; "
+				+ "track:#00000000; thumb:#4D4D4D; hoverThumbColor:#787878; showButtons:false");
+				
+		scrollPane.addHierarchyListener(e ->
+		{
+			if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && scrollPane.isShowing())
+			{
+				SwingUtilities.updateComponentTreeUI(scrollPane);
+			}
+		});
 	}
 
 	private static JPanel buildMultiplierGrid(int contentW, JSpinner levelSpin, JSpinner killSpin, JSpinner xpSpin,
