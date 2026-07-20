@@ -2,8 +2,10 @@ package com.osrstcg.service;
 
 import com.osrstcg.ui.TcgPanel;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -64,6 +66,14 @@ public final class GameMessageCreditTracker
 	private static final long HARD_TREASURE_TRAIL_CREDITS = 3_000L;
 	private static final long ELITE_TREASURE_TRAIL_CREDITS = 4_000L;
 	private static final long MASTER_TREASURE_TRAIL_CREDITS = 5_000L;
+
+	/**
+	 * Boss KC / completion lines use {@link ChatMessageType#GAMEMESSAGE} by default, but
+	 * {@link ChatMessageType#SPAM} when the in-game "Filter out boss kill-count with spam-filter" setting is on.
+	 */
+	private static final Set<ChatMessageType> CREDIT_CHAT_TYPES = EnumSet.of(
+		ChatMessageType.GAMEMESSAGE,
+		ChatMessageType.SPAM);
 
 	private static final List<CreditRule> CREDIT_RULES = buildCreditRules();
 
@@ -153,7 +163,7 @@ public final class GameMessageCreditTracker
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (event == null || !ChatMessageType.GAMEMESSAGE.equals(event.getType()))
+		if (event == null || !CREDIT_CHAT_TYPES.contains(event.getType()))
 		{
 			return;
 		}
