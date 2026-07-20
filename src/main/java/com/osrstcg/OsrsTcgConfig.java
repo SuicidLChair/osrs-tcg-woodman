@@ -226,12 +226,19 @@ public interface OsrsTcgConfig extends Config
 	)
 	String webAlbumSection = "webAlbum";
 
+	String WEB_SHARE_ENABLED_WARNING =
+		"Enabling this uploads your OSRS TCG collection, collection statistics and\n"
+			+ "IP address to a third-party server not controlled or verified by RuneLite developers.\n\n"
+			+ "Your collection will be publicly viewable under your display name and\n"
+			+ "will remain visible for a period even after you disable this feature.";
+
 	@ConfigItem(
 		keyName = "webShareEnabled",
 		name = "Share collection online",
 		description = "Show your collection on osrs-tcg.xyz while logged in.",
 		section = webAlbumSection,
-		position = 0
+		position = 0,
+		warning = WEB_SHARE_ENABLED_WARNING
 	)
 	default boolean webShareEnabled()
 	{
