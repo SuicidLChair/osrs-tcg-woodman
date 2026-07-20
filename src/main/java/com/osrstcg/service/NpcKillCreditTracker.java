@@ -32,7 +32,6 @@ public final class NpcKillCreditTracker
 	/** Boss display name -> NPC ids that count as the real kill (final phase only). */
 	private static final Map<String, Set<Integer>> FINAL_PHASE_IDS = Map.ofEntries(
 		Map.entry("Kalphite Queen", Set.of(965)),
-		Map.entry("Verzik Vitur", Set.of(10832, 8371, 10849))
 	);
 
 	/** Kill-credit exclusions: exact name, name fragment (with optional exception), or NPC id. */
@@ -47,6 +46,7 @@ public final class NpcKillCreditTracker
 		NpcExclusionRule.npcIds(ExcludedNpcIds.AMOXLIATL_UNSTABLE_ICE),
 		NpcExclusionRule.npcIds(ExcludedNpcIds.CRACKED_ICE),
 		NpcExclusionRule.npcIds(ExcludedNpcIds.GREAT_OLM),
+		NpcExclusionRule.npcIds(ExcludedNpcIds.THEATRE_OF_BLOOD),
 		NpcExclusionRule.npcIds(ExcludedNpcIds.TOMBS_OF_AMASCUT),
 		NpcExclusionRule.exactName("The Nightmare"),
 		NpcExclusionRule.exactName("Phosani's Nightmare"),
@@ -277,6 +277,22 @@ public final class NpcKillCreditTracker
 		static final Set<Integer> GREAT_OLM = Set.of(7550, 7551, 7552, 7553, 7554, 7555);
 
 		/**
+		 * Theatre of Blood — every NPC inside the raid, all difficulty modes (kill credits via
+		 * {@link GameMessageCreditTracker}). Unlike CoX, whose party-scaled room monsters have no
+		 * combat level and are already skipped by the level check in
+		 * {@link CreditAwardService#awardNpcKillCredits}, ToB monsters have fixed combat levels, so
+		 * the whole raid must be excluded by id. The raid's NPCs occupy two contiguous gameval id
+		 * blocks: TOB_XARPUS_STATIC (8338) through TOB_SOTETSEG_CREEPER (8389) for Normal Mode, and
+		 * TOB_XARPUS_STATIC_STORY (10766) through TOB_SOTETSEG_CREEPER_HARD (10869) for Entry and
+		 * Hard Mode. Ids adjacent to the blocks are pets and lobby NPCs; quest-only variants
+		 * (TOBQUEST_*) are intentionally not excluded.
+		 */
+		static final Set<Integer> THEATRE_OF_BLOOD = java.util.stream.IntStream
+			.concat(
+				// Normal Mode
+				java.util.stream.IntStream.rangeClosed(8338, 8389),
+				// Entry Mode and Hard Mode
+				java.util.stream.IntStream.rangeClosed(10766, 10869))
 		 * Tombs of Amascut — every NPC inside the raid (kill credits via {@link GameMessageCreditTracker}).
 		 * The raid's NPCs occupy the contiguous gameval id block TOA_SCABARAS_SCARAB (11697) through
 		 * AKKHA_SHADOW_ENRAGE_DUMMY (11799): path monsters and baboons, Kephri and her scarabs, Zebak and

@@ -27,6 +27,17 @@ public final class GameMessageCreditTracker
 	private static final long CHAMBERS_OF_XERIC_COMPLETION_CREDITS = 12_500L;
 	private static final String CHAMBERS_OF_XERIC_COMPLETION_PREFIX = "Your completed Chambers of Xeric count is:";
 
+	private static final long THEATRE_OF_BLOOD_HARD_MODE_COMPLETION_CREDITS = 18_500L;
+	private static final String THEATRE_OF_BLOOD_HARD_MODE_COMPLETION_PREFIX =
+		"Your completed Theatre of Blood: Hard Mode count is:";
+
+	private static final long THEATRE_OF_BLOOD_ENTRY_MODE_COMPLETION_CREDITS = 3_500L;
+	private static final String THEATRE_OF_BLOOD_ENTRY_MODE_COMPLETION_PREFIX =
+		"Your completed Theatre of Blood: Entry Mode count is:";
+
+	private static final long THEATRE_OF_BLOOD_COMPLETION_CREDITS = 12_500L;
+	private static final String THEATRE_OF_BLOOD_COMPLETION_PREFIX = "Your completed Theatre of Blood count is:";
+
 	private static final long TOMBS_OF_AMASCUT_EXPERT_MODE_COMPLETION_CREDITS = 18_500L;
 	private static final String TOMBS_OF_AMASCUT_EXPERT_MODE_COMPLETION_PREFIX =
 		"Your completed Tombs of Amascut: Expert Mode count is:";
@@ -99,6 +110,18 @@ public final class GameMessageCreditTracker
 			CHAMBERS_OF_XERIC_COMPLETION_PREFIX,
 			CHAMBERS_OF_XERIC_COMPLETION_CREDITS,
 			"Chambers of Xeric completion"));
+		rules.add(CreditRule.prefix(
+			THEATRE_OF_BLOOD_HARD_MODE_COMPLETION_PREFIX,
+			THEATRE_OF_BLOOD_HARD_MODE_COMPLETION_CREDITS,
+			"Theatre of Blood Hard Mode completion"));
+		rules.add(CreditRule.prefix(
+			THEATRE_OF_BLOOD_ENTRY_MODE_COMPLETION_PREFIX,
+			THEATRE_OF_BLOOD_ENTRY_MODE_COMPLETION_CREDITS,
+			"Theatre of Blood Entry Mode completion"));
+		rules.add(CreditRule.prefix(
+			THEATRE_OF_BLOOD_COMPLETION_PREFIX,
+			THEATRE_OF_BLOOD_COMPLETION_CREDITS,
+			"Theatre of Blood completion"));
 		rules.add(CreditRule.prefix(
 			TOMBS_OF_AMASCUT_EXPERT_MODE_COMPLETION_PREFIX,
 			TOMBS_OF_AMASCUT_EXPERT_MODE_COMPLETION_CREDITS,
