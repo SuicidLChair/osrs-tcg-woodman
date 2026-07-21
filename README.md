@@ -1,6 +1,6 @@
-# OSRS TCG
+# OSRS TCG - EZ Mode
 
-A RuneLite plugin that adds a light collectible card experience. Credits are obtained by playing the game, spend them on booster packs, and grow your card collection.
+A RuneLite plugin that adds more packs that are narrowing for more currency to an existing pluin that adds a light collectible card experience. Credits are obtained by playing the game, spend them on booster packs, and grow your card collection.
 
 The plugin features party plugin integration that allows you to trade cards with other players.
 
@@ -16,6 +16,7 @@ Join the community on [Discord](https://discord.gg/P4pPu6RnCj).
 
 Parts of this plugin were inspired by other RuneLite plugins:
 
+- [OSRS TCG](https://runelite.net/plugin-hub/show/osrs-tcg)
 - [Monster Monitor](https://runelite.net/plugin-hub/show/monster-monitor) NPC kill credit tracking
 - [Customizable XP Drops](https://runelite.net/plugin-hub/show/customizable-xp-drops) XP drop value tracking
 
