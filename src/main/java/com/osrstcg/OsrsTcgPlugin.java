@@ -102,8 +102,8 @@ import net.runelite.client.util.Text;
 
 @Slf4j
 @PluginDescriptor(
-	name = "OSRS TCG",
-	description = "TCG-style card collecting plugin for Old School RuneScape"
+	name = "OSRS TCG EZ Mode",
+	description = "Filtered Packs added to the TCG-style card collecting plugin for Old School RuneScape"
 )
 public class OsrsTcgPlugin extends Plugin
 {
